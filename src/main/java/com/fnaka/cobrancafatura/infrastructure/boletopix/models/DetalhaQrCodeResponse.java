@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boleto.models;
+package com.fnaka.cobrancafatura.infrastructure.boletopix.models;
 
 public record DetalhaQrCodeResponse(
         String url,

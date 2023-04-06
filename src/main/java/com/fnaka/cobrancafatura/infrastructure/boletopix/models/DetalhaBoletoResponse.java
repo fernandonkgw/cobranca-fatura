@@ -1,6 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boleto.models;
-
-import com.fnaka.cobrancafatura.domain.boletoerp.BoletoErpStatus;
+package com.fnaka.cobrancafatura.infrastructure.boletopix.models;
 
 import java.time.Instant;
 
@@ -17,6 +15,8 @@ public record DetalhaBoletoResponse(
 
         String mensagem,
         Instant criadoEm,
-        Instant atualizadoEm
+        Instant atualizadoEm,
+
+        DetalhaQrCodeResponse qrCode
 ) {
 }
