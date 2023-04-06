@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boletoerp.models;
+package com.fnaka.cobrancafatura.infrastructure.boleto.models;
 
 import java.time.Instant;
 

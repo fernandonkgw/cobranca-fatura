@@ -1,15 +1,21 @@
-package com.fnaka.cobrancafatura.infrastructure.boletoerp.models;
+package com.fnaka.cobrancafatura.infrastructure.boleto.models;
 
 import com.fnaka.cobrancafatura.domain.boletoerp.BoletoErpStatus;
 
 import java.time.Instant;
 
-public record BuscaBoletoErpPorIdResponse(
+public record DetalhaBoletoResponse(
         String id,
         Integer convenio,
         String numeroTituloCliente,
-        BoletoErpStatus status,
-        String motivoErro,
+
+        Instant dataHoraEmissao,
+
+        Instant dataVencimento,
+
+        Instant dataPagamento,
+
+        String mensagem,
         Instant criadoEm,
         Instant atualizadoEm
 ) {

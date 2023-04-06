@@ -18,7 +18,10 @@ public interface BoletoErpAPI {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(summary = "Cria um novo Boleto ERP para importar um Boleto Registrado na instiuicao financeira")
+    @Operation(
+            summary = "Cria um novo Boleto ERP para importar um Boleto Registrado na instituicao financeira",
+            description = "Notifica Correios Empresa com webhook"
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
             @ApiResponse(responseCode = "422", description = "Um erro de validacao foi encontrado"),
