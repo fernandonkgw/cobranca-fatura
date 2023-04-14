@@ -50,7 +50,7 @@ public interface BoletoPixAPI {
     })
     CriaPixDeBoletoResponse criaPixDeBoleto(@PathVariable(name = "id") String id);
 
-    @PostMapping(value = "{id}")
+    @GetMapping(value = "{id}")
     @Operation(summary = "Detalha um Boleto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Boleto encontrado"),
