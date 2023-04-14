@@ -54,6 +54,10 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return numeroTituloCliente;
     }
 
+    public BoletoStatus getStatus() {
+        return status;
+    }
+
     public Instant getCriadoEm() {
         return criadoEm;
     }

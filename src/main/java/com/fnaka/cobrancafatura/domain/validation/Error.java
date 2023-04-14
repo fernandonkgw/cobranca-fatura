@@ -5,21 +5,21 @@ import java.util.List;
 
 public record Error(
         String message,
-        String code,
+        ErrorCode code,
         List<String> params
 ) {
 
-    public static Error with(final String message, final String code) {
-        return new Error(message, code, Collections.emptyList());
+    public static Error with(final ErrorCode code) {
+        return new Error(code.getMessage(), code, Collections.emptyList());
     }
 
     public static Error with(final String message) {
-        return Error.with(message, "CFA-000");
+        return new Error(message, ErrorCode.CFA_000, Collections.emptyList());
     }
 
-    public static Error with(final String message, final String code, Object param) {
+    public static Error with(final ErrorCode code, Object param) {
         final var aParam = param.toString();
-        return new Error(message, code, List.of(aParam));
+        return new Error(code.getMessage(), code, List.of(aParam));
     }
 
     public String getFirstParam() {

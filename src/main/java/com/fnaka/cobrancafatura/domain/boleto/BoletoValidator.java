@@ -1,6 +1,7 @@
 package com.fnaka.cobrancafatura.domain.boleto;
 
 import com.fnaka.cobrancafatura.domain.validation.Error;
+import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import com.fnaka.cobrancafatura.domain.validation.ValidationHandler;
 import com.fnaka.cobrancafatura.domain.validation.Validator;
 
@@ -21,12 +22,12 @@ public class BoletoValidator extends Validator {
     private void checkConvenioConstraints() {
         final var convenio = this.boleto.getConvenio();
         if (convenio == null) {
-            this.validationHandler().append(Error.with("'convenio' should not be null", "CFA-001"));
+            this.validationHandler().append(Error.with(ErrorCode.CFA_001));
             return;
         }
 
         if (convenio < 0) {
-            this.validationHandler().append(Error.with("'convenio' should not be less than zero", "CFA-002", convenio));
+            this.validationHandler().append(Error.with(ErrorCode.CFA_002, convenio));
         }
     }
 }
