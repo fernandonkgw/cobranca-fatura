@@ -3,6 +3,7 @@ package com.fnaka.cobrancafatura.domain.boleto;
 import com.fnaka.cobrancafatura.domain.AggregateRoot;
 import com.fnaka.cobrancafatura.domain.utils.InstantUtils;
 import com.fnaka.cobrancafatura.domain.validation.ValidationHandler;
+import com.fnaka.cobrancafatura.domain.validation.handler.ThrowsValidationHandler;
 
 import java.time.Instant;
 
@@ -42,7 +43,7 @@ public class Boleto extends AggregateRoot<BoletoID> {
 
     @Override
     public void validate(ValidationHandler handler) {
-
+        new BoletoValidator(this, handler).validate();
     }
 
     public Integer getConvenio() {
@@ -62,6 +63,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
     }
 
     private void selfValidate() {
-
+        validate(new ThrowsValidationHandler());
     }
 }

@@ -1,9 +1,8 @@
 package com.fnaka.cobrancafatura.domain.boleto;
 
+import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BoletoTest {
 
@@ -29,16 +28,21 @@ class BoletoTest {
     @Test
     void givenAnInvalidNullConvenio_shouldCallsNewBoleto_shouldReceiveNotification() {
         // given
-        final Integer expectedConvenio = null;
         final var expectedNumeroTituloCliente = "0001";
         final var expectedErrorCount = 1;
         final var expectedErrorMessage = "'convenio' should not be null";
         final var expectedErrorCode = "CFA-001";
 
-//        final var actualException = Assertions.assertThrows(
-//                NotificationException.class,
-//                () -> Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente)
-//        );
+        // when
+        final var actualException = Assertions.assertThrows(
+                DomainException.class,
+                () -> Boleto.newBoleto(null, expectedNumeroTituloCliente)
+        );
 
+        // then
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
+        Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
     }
 }
