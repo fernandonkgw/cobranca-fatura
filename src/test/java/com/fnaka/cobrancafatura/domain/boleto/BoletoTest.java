@@ -66,7 +66,6 @@ class BoletoTest {
         );
 
         // then
-        Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
         Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
         Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
@@ -77,10 +76,20 @@ class BoletoTest {
     void givenAnInvalidNullNumeroTituloCliente_whenCallsNewBoleto_shouldThrowsDomainException() {
         // given
         final var expectedConvenio = 1;
-        final var expectedNumeroTituloCliente = "0001";
         final var expectedErrorCount = 1;
         final var expectedErrorMessage = "'numeroTituloCliente' should not be null";
-        final var expectedErrorCode = "CFA-002";
-        final var expectedErrorParam = "-1";
+        final var expectedErrorCode = ErrorCode.CFA_003;
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                DomainException.class,
+                () -> Boleto.newBoleto(expectedConvenio, null)
+        );
+
+        // then
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
+        Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
     }
 }

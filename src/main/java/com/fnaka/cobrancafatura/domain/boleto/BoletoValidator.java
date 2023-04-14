@@ -17,6 +17,7 @@ public class BoletoValidator extends Validator {
     @Override
     public void validate() {
         checkConvenioConstraints();
+        checkNumeroTituloClienteConstraints();
     }
 
     private void checkConvenioConstraints() {
@@ -28,6 +29,13 @@ public class BoletoValidator extends Validator {
 
         if (convenio < 0) {
             this.validationHandler().append(Error.with(ErrorCode.CFA_002, convenio));
+        }
+    }
+
+    private void checkNumeroTituloClienteConstraints() {
+        final var numeroTituloCliente = this.boleto.getNumeroTituloCliente();
+        if (numeroTituloCliente == null) {
+            this.validationHandler().append(Error.with(ErrorCode.CFA_003));
         }
     }
 }

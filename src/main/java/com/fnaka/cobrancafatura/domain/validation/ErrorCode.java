@@ -3,7 +3,8 @@ package com.fnaka.cobrancafatura.domain.validation;
 public enum ErrorCode {
     CFA_000("CFA-000", "Generic Error"),
     CFA_001("CFA-001", "'convenio' should not be null"),
-    CFA_002("CFA-002", "'convenio' should not be less than zero");
+    CFA_002("CFA-002", "'convenio' should not be less than zero"),
+    CFA_003("CFA-003", "'numeroTituloCliente' should not be null");
 
     private final String code;
     private final String message;
