@@ -15,8 +15,18 @@ public class BoletoValidator extends Validator {
 
     @Override
     public void validate() {
-        if (this.boleto.getConvenio() == null) {
+        checkConvenioConstraints();
+    }
+
+    private void checkConvenioConstraints() {
+        final var convenio = this.boleto.getConvenio();
+        if (convenio == null) {
             this.validationHandler().append(Error.with("'convenio' should not be null", "CFA-001"));
+            return;
+        }
+
+        if (convenio < 0) {
+            this.validationHandler().append(Error.with("'convenio' should not be less than zero", "CFA-002", convenio));
         }
     }
 }
