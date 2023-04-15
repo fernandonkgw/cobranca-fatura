@@ -10,7 +10,7 @@ class BoletoTest {
     @Test
     void givenValidParams_whenCallsNewBoleto_shouldInstantiateABoleto() {
         // given
-        final var expectedConvenio = 1;
+        final var expectedConvenio = 1234567;
         final var expectedNumeroTituloCliente = "0001";
         final var expectedStatus = BoletoStatus.CRIADO;
 
@@ -73,9 +73,32 @@ class BoletoTest {
     }
 
     @Test
+    void givenAnInvalidLengthConvenio_shouldCallsNewBoleto_shouldThrowsDomainException() {
+        // given
+        final var expectedConvenio = 12345678;
+        final var expectedNumeroTituloCliente = "0001";
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'convenio' must be 7 characters";
+        final var expectedErrorCode = ErrorCode.CFA_005;
+        final var expectedErrorParam = "12345678";
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                DomainException.class,
+                () -> Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente)
+        );
+
+        // then
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
+        Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
+        Assertions.assertEquals(expectedErrorParam, actualException.getFirstError().getFirstParam());
+    }
+
+    @Test
     void givenAnInvalidNullNumeroTituloCliente_whenCallsNewBoleto_shouldThrowsDomainException() {
         // given
-        final var expectedConvenio = 1;
+        final var expectedConvenio = 1234567;
         final var expectedErrorCount = 1;
         final var expectedErrorMessage = "'numeroTituloCliente' should not be null";
         final var expectedErrorCode = ErrorCode.CFA_003;
@@ -84,6 +107,28 @@ class BoletoTest {
         final var actualException = Assertions.assertThrows(
                 DomainException.class,
                 () -> Boleto.newBoleto(expectedConvenio, null)
+        );
+
+        // then
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
+        Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
+    }
+
+    @Test
+    void givenAnInvalidEmptyNumeroTituloCliente_whenCallsNewBoleto_shouldThrowsDomainException() {
+        // given
+        final var expectedConvenio = 1234567;
+        final var expectedNumeroTituloCliente = "   ";
+        final var expectedErrorCount = 1;
+        final var expectedErrorMessage = "'numeroTituloCliente' should not be empty";
+        final var expectedErrorCode = ErrorCode.CFA_004;
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                DomainException.class,
+                () -> Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente)
         );
 
         // then
