@@ -33,12 +33,21 @@ public class Boleto extends AggregateRoot<BoletoID> {
         selfValidate();
     }
 
-
-
     public static Boleto newBoleto(final Integer convenio, final String numeroTituloCliente) {
         final var anId = BoletoID.unique();
         final var agora = InstantUtils.now();
         return new Boleto(anId, convenio, numeroTituloCliente, BoletoStatus.CRIADO, agora, agora);
+    }
+
+    public static Boleto with(
+            final BoletoID id,
+            final Integer convenio,
+            final String numeroTituloCliente,
+            final BoletoStatus status,
+            final Instant criadoEm,
+            final Instant atualizadoEm
+    ) {
+        return new Boleto(id, convenio, numeroTituloCliente, status, criadoEm, atualizadoEm);
     }
 
     @Override
