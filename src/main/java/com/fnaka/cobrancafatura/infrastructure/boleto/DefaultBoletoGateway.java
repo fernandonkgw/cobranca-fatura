@@ -8,6 +8,7 @@ import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoReposito
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
 import com.fnaka.cobrancafatura.infrastructure.services.EventService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class DefaultBoletoGateway implements BoletoGateway {
     }
 
     @Override
+    @Transactional
     public Boleto create(Boleto boleto) {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
@@ -36,7 +38,9 @@ public class DefaultBoletoGateway implements BoletoGateway {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Boleto> findById(BoletoID id) {
-        return Optional.empty();
+        return this.boletoRepository.findById(id.getValue())
+                .map(BoletoJpaEntity::toAggregate);
     }
 }

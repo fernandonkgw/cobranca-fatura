@@ -3,7 +3,9 @@ package com.fnaka.cobrancafatura.application.boleto.busca;
 import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
+import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
+import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -52,5 +54,25 @@ class BuscaBoletoPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedStatus, actualOutput.status());
         Assertions.assertEquals(boleto.getCriadoEm(), actualOutput.criadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), actualOutput.atualizadoEm());
+    }
+
+    @Test
+    void givenAnInvalidId_whenCallsBuscaBoletoPorId_shouldThrowsDomainException() {
+        // given
+        final var expectedId = BoletoID.from("invalid");
+
+        final var expectedErrorMessage = "Boleto not found";
+
+        when(boletoGateway.findById(any()))
+                .thenReturn(Optional.empty());
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                DomainException.class, () -> useCase.execute(expectedId.getValue())
+        );
+
+        // then
+        Assertions.assertNotNull(actualException);
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
     }
 }

@@ -37,7 +37,7 @@ public class Boleto extends AggregateRoot<BoletoID> {
         final var anId = BoletoID.unique();
         final var agora = InstantUtils.now();
         final var result = new Boleto(anId, convenio, numeroTituloCliente, BoletoStatus.CRIADO, agora, agora);
-        result.registerEvent(new BoletoCriado(anId.getValue()));
+        result.registerEvent(new BoletoCriadoEvent(anId.getValue()));
         return result;
     }
 

@@ -1,7 +1,7 @@
 package com.fnaka.cobrancafatura.infrastructure.boleto.services.impl;
 
 import com.fnaka.cobrancafatura.AmqpTest;
-import com.fnaka.cobrancafatura.domain.boleto.BoletoCriado;
+import com.fnaka.cobrancafatura.domain.boleto.BoletoCriadoEvent;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
 import com.fnaka.cobrancafatura.infrastructure.configuration.json.Json;
 import com.fnaka.cobrancafatura.infrastructure.services.EventService;
@@ -32,7 +32,7 @@ class RabbitEventServiceTest {
     @Test
     void shouldSendMessage() throws InterruptedException {
         // given
-        final var notification = new BoletoCriado("123");
+        final var notification = new BoletoCriadoEvent("123");
 
         final var expectedMessage = Json.writeValueAsString(notification);
 
