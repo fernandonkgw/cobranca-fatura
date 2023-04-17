@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boletopix.models;
+package com.fnaka.cobrancafatura.infrastructure.boleto.models;
 
 public record CriaBoletoRequest(
         Integer convenio,

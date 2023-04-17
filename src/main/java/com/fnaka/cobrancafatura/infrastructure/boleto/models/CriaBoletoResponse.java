@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boletopix.models;
+package com.fnaka.cobrancafatura.infrastructure.boleto.models;
 
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoOutput;
 

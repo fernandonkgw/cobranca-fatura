@@ -1,8 +1,8 @@
 package com.fnaka.cobrancafatura.infrastructure.api;
 
 import com.fnaka.cobrancafatura.domain.pagination.Pagination;
-import com.fnaka.cobrancafatura.infrastructure.boletopix.models.CriaBoletoRequest;
-import com.fnaka.cobrancafatura.infrastructure.boletopix.models.CriaBoletoResponse;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoRequest;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boletopix.models.DetalhaBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boletopix.models.CriaPixDeBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boletopix.models.ListaBoletosResponse;

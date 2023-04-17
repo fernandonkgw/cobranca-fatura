@@ -6,7 +6,7 @@ import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoCommand;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoOutput;
 import com.fnaka.cobrancafatura.application.boleto.cria.DefaultCriaBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
-import com.fnaka.cobrancafatura.infrastructure.boletopix.models.CriaBoletoRequest;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

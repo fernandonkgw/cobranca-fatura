@@ -7,7 +7,7 @@ amqp:
   password: 123456
 
 postgresql:
-  username: root
+  username: postgres
   password: 123456
   schema: cobranca_fatura
   url: localhost:5432

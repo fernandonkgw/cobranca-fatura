@@ -4,6 +4,8 @@ import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoCommand;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.pagination.Pagination;
 import com.fnaka.cobrancafatura.infrastructure.api.BoletoAPI;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoRequest;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boletopix.models.*;
 import org.springframework.web.bind.annotation.RestController;
 

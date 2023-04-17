@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+
+  postgres:
+    image: postgres:13.4
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: cobranca_fatura
+    volumes:
+      - ./postgresqldata:/var/lib/postgresql/data
+    restart: always
+
+  rabbit:
+    container_name: cobranca_fatura_rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=cobranca_fatura
+      - RABBITMQ_DEFAULT_PASS=123456
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - cobranca_fatura_network
+
+networks:
+  cobranca_fatura_network:
