@@ -2,11 +2,14 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
+import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
 import com.fnaka.cobrancafatura.infrastructure.services.EventService;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class DefaultBoletoGateway implements BoletoGateway {
@@ -30,5 +33,10 @@ public class DefaultBoletoGateway implements BoletoGateway {
         boleto.publishDomainEvents(this.eventService::send);
 
         return result;
+    }
+
+    @Override
+    public Optional<Boleto> findById(BoletoID id) {
+        return Optional.empty();
     }
 }

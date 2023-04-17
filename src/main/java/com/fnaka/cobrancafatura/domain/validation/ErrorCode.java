@@ -6,7 +6,8 @@ public enum ErrorCode {
     CFA_002("CFA-002", "'convenio' should not be less than zero"),
     CFA_003("CFA-003", "'numeroTituloCliente' should not be null"),
     CFA_004("CFA-004", "'numeroTituloCliente' should not be empty"),
-    CFA_005("CFA-005", "'convenio' must be 7 characters");
+    CFA_005("CFA-005", "'convenio' must be 7 characters"),
+    CFA_006("CFA-006", "Boleto not found");
 
     private final String code;
     private final String message;
