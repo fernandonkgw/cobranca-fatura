@@ -10,17 +10,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("v1/boletos")
 @Tag(name = "Boletos")
-public interface BoletoPixAPI {
+public interface BoletoAPI {
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(
             summary = "Cria um novo Boleto ERP para importar um Boleto Registrado na instituicao financeira",
             description = "Notifica Correios Empresa com webhook"

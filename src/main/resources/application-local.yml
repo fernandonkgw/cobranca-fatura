@@ -1,0 +1,13 @@
+amqp:
+  admin:
+    auto-create: true
+  host: localhost
+  port: 5672
+  username: cobranca_fatura
+  password: 123456
+
+postgresql:
+  username: root
+  password: 123456
+  schema: cobranca_fatura
+  url: localhost:5432
