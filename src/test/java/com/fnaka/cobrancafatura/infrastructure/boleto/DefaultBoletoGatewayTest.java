@@ -1,24 +1,24 @@
 package com.fnaka.cobrancafatura.infrastructure.boleto;
 
-import com.fnaka.cobrancafatura.PostgreSQLGatewayTest;
+import com.fnaka.cobrancafatura.IntegrationTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@PostgreSQLGatewayTest
-class BoletoPostgreSQLGatewayTest {
+@IntegrationTest
+class DefaultBoletoGatewayTest {
 
     @Autowired
-    private BoletoPostgreSQLGateway boletoPostgreSQLGateway;
+    private DefaultBoletoGateway boletoGateway;
 
     @Autowired
     private BoletoRepository boletoRepository;
 
     @Test
     void testDependencies() {
-        Assertions.assertNotNull(boletoPostgreSQLGateway);
+        Assertions.assertNotNull(boletoGateway);
         Assertions.assertNotNull(boletoRepository);
     }
 
@@ -32,7 +32,7 @@ class BoletoPostgreSQLGatewayTest {
         final var expectedId = boleto.getId();
 
         // when
-        final var actualBoleto = boletoPostgreSQLGateway.create(boleto);
+        final var actualBoleto = boletoGateway.create(boleto);
 
         // then
         Assertions.assertNotNull(actualBoleto);

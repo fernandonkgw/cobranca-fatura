@@ -1,8 +1,17 @@
+amqp:
+  admin:
+    auto-create: false
+  queues:
+    boleto-criado:
+      exchange: boleto.events
+      routing-key: boleto.criado
+      queue: boleto.criado.queue
+
 spring:
   datasource:
-    url: jdbc:postgresql://${mysql.url}/${mysql.schema}?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
-    username: ${mysql.username}
-    password: ${mysql.password}
+    url: jdbc:postgresql://${postgresql.url}/${postgresql.schema}?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${postgresql.username}
+    password: ${postgresql.password}
     hikari:
       auto-commit: false
       connection-timeout: 250 # É uma configuração em milliseconds. O ideal é manter baixo para que estoure timeout logo e não prenda as threads.
@@ -21,3 +30,9 @@ spring:
       "[hibernate.connection.provider_disables_autocommit]": true
       # Para aumentar a performance ao máximo, desabilitamos o auto-commit e o open-in-view.
       # https://vladmihalcea.com/why-you-should-always-use-hibernate-connection-provider_disables_autocommit-for-resource-local-jpa-transactions/
+  rabbitmq:
+    dynamic: ${amqp.admin.auto-create}
+    host: ${amqp.host}
+    port: ${amqp.port}
+    username: ${amqp.username}
+    password: ${amqp.password}
