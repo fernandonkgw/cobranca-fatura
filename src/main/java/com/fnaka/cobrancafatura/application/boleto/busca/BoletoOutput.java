@@ -24,4 +24,6 @@ public record BoletoOutput(
                 boleto.getAtualizadoEm()
         );
     }
+
+
 }

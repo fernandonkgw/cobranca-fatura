@@ -7,4 +7,6 @@ public interface BoletoGateway {
     Boleto create(Boleto boleto);
 
     Optional<Boleto> findById(BoletoID id);
+
+    Boleto update(Boleto boleto);
 }

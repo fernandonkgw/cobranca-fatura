@@ -80,4 +80,10 @@ public class Boleto extends AggregateRoot<BoletoID> {
     private void selfValidate() {
         validate(new ThrowsValidationHandler());
     }
+
+    public void registroConfirmado() {
+        this.status = BoletoStatus.REGISTRADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new BoletoRegistradoEvent(this.getId().getValue()));
+    }
 }

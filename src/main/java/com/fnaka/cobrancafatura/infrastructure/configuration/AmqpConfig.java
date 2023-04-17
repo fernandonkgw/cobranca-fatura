@@ -2,6 +2,7 @@ package com.fnaka.cobrancafatura.infrastructure.configuration;
 
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoEvents;
+import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoRegistradoQueue;
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.QueueProperties;
 import org.springframework.amqp.core.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,6 +16,13 @@ public class AmqpConfig {
     @ConfigurationProperties("amqp.queues.boleto-criado")
     @BoletoCriadoQueue
     QueueProperties boletoCriadoQueueProperties() {
+        return new QueueProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("amqp.queues.boleto-registrado")
+    @BoletoRegistradoQueue
+    QueueProperties boletoRegistradoQueueProperties() {
         return new QueueProperties();
     }
 
@@ -39,6 +47,22 @@ public class AmqpConfig {
                 @BoletoEvents DirectExchange exchange,
                 @BoletoCriadoQueue Queue queue,
                 @BoletoCriadoQueue QueueProperties props
+        ) {
+            return BindingBuilder.bind(queue).to(exchange).with(props.getRoutingKey());
+        }
+
+        @Bean
+        @BoletoRegistradoQueue
+        Queue boletoRegistradoQueue(@BoletoRegistradoQueue QueueProperties props) {
+            return new Queue(props.getQueue());
+        }
+
+        @Bean
+        @BoletoRegistradoQueue
+        Binding boletoRegistradoQueueBinding(
+                @BoletoEvents DirectExchange exchange,
+                @BoletoRegistradoQueue Queue queue,
+                @BoletoRegistradoQueue QueueProperties props
         ) {
             return BindingBuilder.bind(queue).to(exchange).with(props.getRoutingKey());
         }

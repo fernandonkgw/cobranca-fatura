@@ -43,4 +43,14 @@ public class DefaultBoletoGateway implements BoletoGateway {
         return this.boletoRepository.findById(id.getValue())
                 .map(BoletoJpaEntity::toAggregate);
     }
+
+    @Override
+    public Boleto update(Boleto boleto) {
+        final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
+                .toAggregate();
+
+        boleto.publishDomainEvents(this.eventService::send);
+
+        return result;
+    }
 }

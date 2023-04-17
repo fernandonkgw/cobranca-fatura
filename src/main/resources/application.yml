@@ -6,6 +6,10 @@ amqp:
       exchange: boleto.events
       routing-key: boleto.criado
       queue: boleto.criado.queue
+    boleto-registrado:
+      exchange: boleto.events
+      routing-key: boleto.registrado
+      queue: boleto.registrado.queue
 
 spring:
   datasource:
