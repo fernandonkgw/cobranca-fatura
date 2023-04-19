@@ -6,6 +6,7 @@ import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
+import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoRegistradoQueue;
 import com.fnaka.cobrancafatura.infrastructure.services.EventService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +17,19 @@ import java.util.Optional;
 public class DefaultBoletoGateway implements BoletoGateway {
 
     private final BoletoRepository boletoRepository;
-    private final EventService eventService;
+
+    private final EventService eventServiceBoletoCriado;
+    private final EventService eventServiceBoletoRegistrado;
+
+
 
     public DefaultBoletoGateway(
             BoletoRepository boletoRepository,
-            @BoletoCriadoQueue EventService eventService
-    ) {
+            @BoletoCriadoQueue EventService eventServiceBoletoCriado,
+            @BoletoRegistradoQueue EventService eventServiceBoletoRegistrado) {
         this.boletoRepository = boletoRepository;
-        this.eventService = eventService;
+        this.eventServiceBoletoCriado = eventServiceBoletoCriado;
+        this.eventServiceBoletoRegistrado = eventServiceBoletoRegistrado;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class DefaultBoletoGateway implements BoletoGateway {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        boleto.publishDomainEvents(this.eventService::send);
+        boleto.publishDomainEvents(this.eventServiceBoletoCriado::send);
 
         return result;
     }
@@ -45,11 +51,12 @@ public class DefaultBoletoGateway implements BoletoGateway {
     }
 
     @Override
+    @Transactional
     public Boleto update(Boleto boleto) {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        boleto.publishDomainEvents(this.eventService::send);
+        boleto.publishDomainEvents(this.eventServiceBoletoRegistrado::send);
 
         return result;
     }

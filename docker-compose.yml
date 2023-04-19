@@ -9,8 +9,6 @@ services:
     environment:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: cobranca_fatura
-    volumes:
-      - ./postgresqldata:/var/lib/postgresql/data
     restart: always
 
   rabbit:

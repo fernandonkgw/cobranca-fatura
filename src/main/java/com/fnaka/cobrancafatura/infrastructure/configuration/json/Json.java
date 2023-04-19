@@ -22,6 +22,10 @@ public enum Json {
         return invoke(() -> INSTANCE.mapper.writeValueAsString(obj));
     }
 
+    public static <T> T readValue(final String json, final Class<T> clazz) {
+        return invoke(() -> INSTANCE.mapper.readValue(json, clazz));
+    }
+
     private final ObjectMapper mapper = new Jackson2ObjectMapperBuilder()
             .dateFormat(new StdDateFormat())
             .featuresToDisable(
@@ -30,7 +34,7 @@ public enum Json {
                     DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES,
                     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
             )
-            .modules(new JavaTimeModule(), new Jdk8Module())
+            .modules(new JavaTimeModule(), new Jdk8Module(), afterburnerModule())
             .build();
 
     private AfterburnerModule afterburnerModule() {

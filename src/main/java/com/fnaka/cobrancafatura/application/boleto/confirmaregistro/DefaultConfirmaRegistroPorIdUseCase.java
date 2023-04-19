@@ -7,6 +7,7 @@ import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
+import org.springframework.transaction.annotation.Transactional;
 
 public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUseCase {
 
