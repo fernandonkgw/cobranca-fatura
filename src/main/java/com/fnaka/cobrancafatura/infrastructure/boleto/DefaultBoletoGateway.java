@@ -17,11 +17,8 @@ import java.util.Optional;
 public class DefaultBoletoGateway implements BoletoGateway {
 
     private final BoletoRepository boletoRepository;
-
     private final EventService eventServiceBoletoCriado;
     private final EventService eventServiceBoletoRegistrado;
-
-
 
     public DefaultBoletoGateway(
             BoletoRepository boletoRepository,
@@ -56,7 +53,11 @@ public class DefaultBoletoGateway implements BoletoGateway {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        boleto.publishDomainEvents(this.eventServiceBoletoRegistrado::send);
+        if (boleto.isRegistrado()) {
+            boleto.publishDomainEvents(this.eventServiceBoletoRegistrado::send);
+        } else {
+
+        }
 
         return result;
     }

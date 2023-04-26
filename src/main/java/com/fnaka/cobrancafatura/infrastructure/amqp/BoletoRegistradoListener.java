@@ -1,9 +1,6 @@
 package com.fnaka.cobrancafatura.infrastructure.amqp;
 
-import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.ConfirmaRegistroPorIdUseCase;
-import com.fnaka.cobrancafatura.domain.boleto.BoletoCriadoEvent;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoRegistradoEvent;
-import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.infrastructure.configuration.json.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

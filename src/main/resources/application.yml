@@ -11,10 +11,12 @@ amqp:
       routing-key: boleto.registrado
       queue: boleto.registrado.queue
 
-banco-do-brasil:
-  developer-application-key: ${BANCO_DO_BRASIL_DEVELOPER_APPLICATION_KEY}
-  client-id: ${BANCO_DO_BRASIL_CLIENT_ID}
-  client-secret: ${BANCO_DO_BRASIL_CLIENT_SECRET}
+banco-brasil:
+  credential:
+    client-id: ${BB_CLIENT_ID}
+    client-secret: ${BB_CLIENT_SECRET}
+    developer-application-key: ${BB_DEVELOPER_APPLICATION_KEY}
+
 
 spring:
   datasource:

@@ -11,3 +11,13 @@ spring:
     console:
       enabled: true
       path: /h2
+
+feign:
+  client:
+    config:
+      bancoBrasilOAuthClient:
+        loggerLevel: full
+
+logging:
+  level:
+    com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil: DEBUG

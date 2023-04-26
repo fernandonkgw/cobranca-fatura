@@ -1,13 +1,11 @@
 package com.fnaka.cobrancafatura.application.boleto.confirmaregistro;
 
-import com.fnaka.cobrancafatura.application.boleto.busca.BoletoOutput;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
-import org.springframework.transaction.annotation.Transactional;
 
 public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUseCase {
 
@@ -31,8 +29,11 @@ public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUs
         final var convenio = boleto.getConvenio();
         final var numeroTituloCliente = boleto.getNumeroTituloCliente();
 
-        cobrancaGateway.confirmaRegistro(convenio, numeroTituloCliente);
-        boleto.registroConfirmado();
+        if (cobrancaGateway.buscaPorConvenioAndNumeroTituloCliente(convenio, numeroTituloCliente).isPresent()) {
+            boleto.registroConfirmado();
+        } else {
+            boleto.registroNaoEncontrado();
+        }
 
         this.boletoGateway.update(boleto);
     }

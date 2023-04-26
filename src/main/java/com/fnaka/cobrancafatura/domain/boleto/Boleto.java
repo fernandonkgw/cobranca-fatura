@@ -11,7 +11,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
 
     private Integer convenio;
     private String numeroTituloCliente;
-
     private BoletoStatus status;
     private Instant criadoEm;
     private Instant atualizadoEm;
@@ -85,5 +84,15 @@ public class Boleto extends AggregateRoot<BoletoID> {
         this.status = BoletoStatus.REGISTRADO;
         this.atualizadoEm = InstantUtils.now();
         this.registerEvent(new BoletoRegistradoEvent(this.getId().getValue()));
+    }
+
+    public void registroNaoEncontrado() {
+        this.status = BoletoStatus.NAO_REGISTRADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new BoletoNaoRegistradoEvent(this.getId().getValue()));
+    }
+
+    public boolean isRegistrado() {
+        return BoletoStatus.REGISTRADO.equals(this.status);
     }
 }

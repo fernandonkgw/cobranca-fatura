@@ -1,6 +1,8 @@
 package com.fnaka.cobrancafatura.domain.boleto;
 
+import java.util.Optional;
+
 public interface CobrancaGateway {
 
-    Boolean confirmaRegistro(Integer convenio, String numeroTituloCliente);
+    Optional<Cobranca> buscaPorConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente);
 }
