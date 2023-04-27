@@ -2,6 +2,7 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 
 import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
+import com.fnaka.cobrancafatura.domain.boleto.PixBoleto;
 import com.fnaka.cobrancafatura.infrastructure.services.BadRequestException;
 import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class DefaultCobrancaGateway implements CobrancaGateway {
     }
 
     @Override
-    public Optional<Cobranca> buscaPorConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente) {
+    public Optional<Cobranca> findByConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente) {
 
         try {
             return Optional.of(cobrancaBoletoService.detalhaCobrancaBoleto(convenio, numeroTituloCliente));
@@ -26,5 +27,10 @@ public class DefaultCobrancaGateway implements CobrancaGateway {
             return Optional.empty();
         }
 
+    }
+
+    @Override
+    public PixBoleto createPix(Integer convenio, String numeroTituloCliente) {
+        return null;
     }
 }

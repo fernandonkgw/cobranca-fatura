@@ -14,6 +14,7 @@ public class Boleto extends AggregateRoot<BoletoID> {
     private BoletoStatus status;
     private Instant criadoEm;
     private Instant atualizadoEm;
+    private PixBoleto pix;
 
     protected Boleto(
             final BoletoID anId,
@@ -76,6 +77,10 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return atualizadoEm;
     }
 
+    public PixBoleto getPix() {
+        return pix;
+    }
+
     private void selfValidate() {
         validate(new ThrowsValidationHandler());
     }
@@ -98,5 +103,12 @@ public class Boleto extends AggregateRoot<BoletoID> {
 
     public boolean isNaoRegistrado() {
         return BoletoStatus.NAO_REGISTRADO.equals(this.status);
+    }
+
+    public void criaPix(PixBoleto pixBoleto) {
+        this.pix = pixBoleto;
+        this.status = BoletoStatus.PIX_CRIADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new PixCriadoEvent(this.getId().getValue()));
     }
 }

@@ -53,7 +53,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.buscaPorConvenioAndNumeroTituloCliente(any(), any()))
+        when(cobrancaGateway.findByConvenioAndNumeroTituloCliente(any(), any()))
                 .thenReturn(Optional.of(cobranca));
 
         // when
@@ -62,7 +62,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         // then
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
-                .buscaPorConvenioAndNumeroTituloCliente(
+                .findByConvenioAndNumeroTituloCliente(
                         eq(expectedConvenio), eq(expectedNumeroTituloCliente)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
@@ -113,7 +113,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.buscaPorConvenioAndNumeroTituloCliente(any(), any()))
+        when(cobrancaGateway.findByConvenioAndNumeroTituloCliente(any(), any()))
                 .thenReturn(Optional.empty());
 
         // when
@@ -122,7 +122,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         // then
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
-                .buscaPorConvenioAndNumeroTituloCliente(
+                .findByConvenioAndNumeroTituloCliente(
                         eq(expectedConvenio), eq(expectedNumeroTituloCliente)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
