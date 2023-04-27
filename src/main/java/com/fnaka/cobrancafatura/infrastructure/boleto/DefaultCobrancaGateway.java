@@ -3,7 +3,7 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
 import com.fnaka.cobrancafatura.infrastructure.services.BadRequestException;
-import com.fnaka.cobrancafatura.infrastructure.services.CobrancaService;
+import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -11,17 +11,17 @@ import java.util.Optional;
 @Component
 public class DefaultCobrancaGateway implements CobrancaGateway {
 
-    private final CobrancaService cobrancaService;
+    private final CobrancaBoletoService cobrancaBoletoService;
 
-    public DefaultCobrancaGateway(CobrancaService cobrancaService) {
-        this.cobrancaService = cobrancaService;
+    public DefaultCobrancaGateway(CobrancaBoletoService cobrancaBoletoService) {
+        this.cobrancaBoletoService = cobrancaBoletoService;
     }
 
     @Override
     public Optional<Cobranca> buscaPorConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente) {
 
         try {
-            return Optional.of(cobrancaService.detalhaCobrancaBoleto(convenio, numeroTituloCliente));
+            return Optional.of(cobrancaBoletoService.detalhaCobrancaBoleto(convenio, numeroTituloCliente));
         } catch (BadRequestException e) {
             return Optional.empty();
         }

@@ -5,9 +5,9 @@ import com.fnaka.cobrancafatura.domain.utils.InstantUtils;
 
 import java.time.Instant;
 
-public record BoletoCriadoEvent(String id, Instant occurredOn) implements DomainEvent {
+public record BoletoCriadoEvent(String id, BoletoStatus status, Instant occurredOn) implements DomainEvent {
 
     public BoletoCriadoEvent(String id) {
-        this(id, InstantUtils.now());
+        this(id, BoletoStatus.CRIADO, InstantUtils.now());
     }
 }

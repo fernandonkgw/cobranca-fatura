@@ -10,7 +10,7 @@ public abstract class AggregateRoot<ID extends Identifier> extends Entity<ID> {
         super(id);
     }
 
-    protected AggregateRoot(final ID id, List<DomainEvent> domainEvents) {
-        super(id, domainEvents);
+    protected AggregateRoot(final ID id, DomainEvent domainEvent) {
+        super(id, domainEvent);
     }
 }

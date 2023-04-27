@@ -4,24 +4,21 @@ import com.fnaka.cobrancafatura.domain.events.DomainEvent;
 import com.fnaka.cobrancafatura.domain.events.DomainEventPublisher;
 import com.fnaka.cobrancafatura.domain.validation.ValidationHandler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 public abstract class Entity<ID extends Identifier> {
 
     protected final ID id;
-    private final List<DomainEvent> domainEvents;
+    private DomainEvent domainEvent;
 
     protected Entity(final ID id) {
         this(id, null);
     }
 
-    protected Entity(final ID id, final List<DomainEvent> domainEvents) {
+    protected Entity(final ID id, final DomainEvent domainEvent) {
         Objects.requireNonNull(id, "'id' should not be null");
         this.id = id;
-        this.domainEvents = new ArrayList<>(domainEvents == null ? Collections.emptyList() : domainEvents);
+        this.domainEvent = domainEvent;
     }
 
     public abstract void validate(ValidationHandler handler);
@@ -30,19 +27,17 @@ public abstract class Entity<ID extends Identifier> {
         return id;
     }
 
-    public List<DomainEvent> getDomainEvents() {
-        return Collections.unmodifiableList(domainEvents);
+    public DomainEvent getDomainEvent() {
+        return this.domainEvent;
     }
 
-    public void publishDomainEvents(final DomainEventPublisher publisher) {
-        if (publisher == null) {
+    public void publishDomainEvent(final DomainEventPublisher publisher) {
+        if (publisher == null || this.domainEvent == null) {
             return;
         }
 
-        getDomainEvents()
-                .forEach(publisher::publishEvent);
-
-        this.domainEvents.clear();
+        publisher.publishEvent(this.domainEvent);
+        this.domainEvent = null;
     }
 
     public void registerEvent(final DomainEvent event) {
@@ -50,7 +45,7 @@ public abstract class Entity<ID extends Identifier> {
             return;
         }
 
-        this.domainEvents.add(event);
+        this.domainEvent = event;
     }
 
     @Override

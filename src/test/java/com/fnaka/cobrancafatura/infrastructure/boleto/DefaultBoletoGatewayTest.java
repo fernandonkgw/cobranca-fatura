@@ -2,6 +2,7 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 
 import com.fnaka.cobrancafatura.IntegrationTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
+import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,38 @@ class DefaultBoletoGatewayTest {
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
         Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNumeroTituloCliente());
+
+        final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
+
+        Assertions.assertEquals(expectedId.getValue(), persistedBoleto.getId());
+        Assertions.assertEquals(expectedConvenio, persistedBoleto.getConvenio());
+        Assertions.assertEquals(expectedNumeroTituloCliente, persistedBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(boleto.getStatus(), persistedBoleto.getStatus());
+        Assertions.assertEquals(boleto.getCriadoEm(), persistedBoleto.getCriadoEm());
+        Assertions.assertEquals(boleto.getAtualizadoEm(), persistedBoleto.getAtualizadoEm());
+
+    }
+
+    @Test
+    void givenAValidBoletoRegistrado_whenCallsUpdate_shouldUpdateIt() {
+        // given
+        final var expectedConvenio = 1234567;
+        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var exoectedStatus = BoletoStatus.REGISTRADO;
+
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var expectedId = boleto.getId();
+
+        boleto.registroConfirmado();
+
+        // when
+        final var actualBoleto = boletoGateway.update(boleto);
+
+        // then
+        Assertions.assertNotNull(actualBoleto);
+        Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
+        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(exoectedStatus, actualBoleto.getStatus());
 
         final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
 

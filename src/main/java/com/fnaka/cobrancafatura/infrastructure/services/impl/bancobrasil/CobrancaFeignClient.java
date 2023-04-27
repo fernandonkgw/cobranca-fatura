@@ -18,7 +18,6 @@ public interface CobrancaFeignClient {
 
     @GetMapping(
             value = "v2/boletos/{numeroTituloCliente}",
-//            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     CobrancaResponse detalhaBoleto(

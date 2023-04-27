@@ -3,11 +3,13 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.BoletoWebhookEvent;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoCriadoQueue;
 import com.fnaka.cobrancafatura.infrastructure.configuration.annotations.BoletoRegistradoQueue;
 import com.fnaka.cobrancafatura.infrastructure.services.EventService;
+import com.fnaka.cobrancafatura.infrastructure.services.WebhookPubService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +21,16 @@ public class DefaultBoletoGateway implements BoletoGateway {
     private final BoletoRepository boletoRepository;
     private final EventService eventServiceBoletoCriado;
     private final EventService eventServiceBoletoRegistrado;
+    private final WebhookPubService webhookPubService;
 
     public DefaultBoletoGateway(
             BoletoRepository boletoRepository,
             @BoletoCriadoQueue EventService eventServiceBoletoCriado,
-            @BoletoRegistradoQueue EventService eventServiceBoletoRegistrado) {
+            @BoletoRegistradoQueue EventService eventServiceBoletoRegistrado, WebhookPubService webhookPubService) {
         this.boletoRepository = boletoRepository;
         this.eventServiceBoletoCriado = eventServiceBoletoCriado;
         this.eventServiceBoletoRegistrado = eventServiceBoletoRegistrado;
+        this.webhookPubService = webhookPubService;
     }
 
     @Override
@@ -35,7 +39,9 @@ public class DefaultBoletoGateway implements BoletoGateway {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        boleto.publishDomainEvents(this.eventServiceBoletoCriado::send);
+        boleto.publishDomainEvent(this.eventServiceBoletoCriado::send);
+
+        this.webhookPubService.send(BoletoWebhookEvent.from(boleto));
 
         return result;
     }
@@ -54,10 +60,13 @@ public class DefaultBoletoGateway implements BoletoGateway {
                 .toAggregate();
 
         if (boleto.isRegistrado()) {
-            boleto.publishDomainEvents(this.eventServiceBoletoRegistrado::send);
-        } else {
+            boleto.publishDomainEvent(this.eventServiceBoletoRegistrado::send);
+        }
+        if (boleto.isNaoRegistrado()) {
 
         }
+
+        this.webhookPubService.send(BoletoWebhookEvent.from(boleto));
 
         return result;
     }

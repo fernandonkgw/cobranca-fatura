@@ -95,4 +95,8 @@ public class Boleto extends AggregateRoot<BoletoID> {
     public boolean isRegistrado() {
         return BoletoStatus.REGISTRADO.equals(this.status);
     }
+
+    public boolean isNaoRegistrado() {
+        return BoletoStatus.NAO_REGISTRADO.equals(this.status);
+    }
 }

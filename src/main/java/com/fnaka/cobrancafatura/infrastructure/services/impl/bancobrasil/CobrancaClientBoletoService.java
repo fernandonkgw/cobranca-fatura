@@ -2,19 +2,18 @@ package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
 import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.BancoBrasilCredential;
-import com.fnaka.cobrancafatura.infrastructure.services.CobrancaService;
+import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
 import com.fnaka.cobrancafatura.infrastructure.utils.AuthorizationUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-@Service
-public class CobrancaClientService implements CobrancaService {
+public class CobrancaClientBoletoService implements CobrancaBoletoService {
 
     private final OAuthFeignClient oAuthFeignClient;
     private final BancoBrasilCredential bancoBrasilCredential;
 
-    public CobrancaClientService(
+    public CobrancaClientBoletoService(
             OAuthFeignClient oAuthFeignClient, BancoBrasilCredential bancoBrasilCredential
     ) {
         this.oAuthFeignClient = oAuthFeignClient;
