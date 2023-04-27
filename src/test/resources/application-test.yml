@@ -15,7 +15,7 @@ spring:
 feign:
   client:
     config:
-      bancoBrasilOAuthClient:
+      bancoBrasilCobrancaBoletoClient:
         loggerLevel: full
 
 logging:

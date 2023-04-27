@@ -1,12 +1,13 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
 import com.fnaka.cobrancafatura.IntegrationTest;
+import com.fnaka.cobrancafatura.ServiceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@IntegrationTest
-class OAuthClientServiceTest {
+@ServiceTest
+class OAuthClientServiceIntegrationTest {
 
     @Autowired
     private OAuthClientService oAuthClientService;

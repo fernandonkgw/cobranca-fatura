@@ -2,8 +2,9 @@ package com.fnaka.cobrancafatura.infrastructure.configuration;
 
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.BancoBrasilCredential;
 import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
-import com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil.CobrancaClientBoletoService;
-import com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil.OAuthFeignClient;
+import com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil.CobrancaBoletoClientService;
+import com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil.CobrancaBoletoFeignClient;
+import com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil.OAuthClientService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,10 @@ public class BancoBrasilConfig {
 
     @Bean
     CobrancaBoletoService cobrancaBoletoService(
-            OAuthFeignClient oAuthFeignClient, BancoBrasilCredential bancoBrasilCredential
+            OAuthClientService oAuthClientService,
+            BancoBrasilCredential bancoBrasilCredential,
+            CobrancaBoletoFeignClient cobrancaBoletoFeignClient
     ) {
-        return new CobrancaClientBoletoService(oAuthFeignClient, bancoBrasilCredential);
+        return new CobrancaBoletoClientService(oAuthClientService, bancoBrasilCredential, cobrancaBoletoFeignClient);
     }
 }

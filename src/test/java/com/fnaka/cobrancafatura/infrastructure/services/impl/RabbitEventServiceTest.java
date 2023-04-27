@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.boleto.services.impl;
+package com.fnaka.cobrancafatura.infrastructure.services.impl;
 
 import com.fnaka.cobrancafatura.AmqpTest;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoCriadoEvent;
