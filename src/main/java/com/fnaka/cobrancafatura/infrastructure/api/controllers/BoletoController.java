@@ -26,7 +26,7 @@ public class BoletoController implements BoletoAPI {
     @Override
     public CriaBoletoResponse criaBoleto(CriaBoletoRequest input) {
         final var command = CriaBoletoCommand.with(
-                input.convenio(), input.numeroTituloCliente()
+                input.convenio(), input.nossoNumero()
         );
 
         final var output = this.criaBoletoUseCase.execute(command);

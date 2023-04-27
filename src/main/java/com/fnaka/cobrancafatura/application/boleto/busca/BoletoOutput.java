@@ -8,7 +8,7 @@ import java.time.Instant;
 public record BoletoOutput(
         String id,
         Integer convenio,
-        String numeroTituloCliente,
+        String nossoNumero,
         BoletoStatus status,
         Instant criadoEm,
         Instant atualizadoEm

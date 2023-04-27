@@ -40,9 +40,9 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
     void givenAValidCommand_whenCallsConfirmaRegistro_shouldUpdateStatusRegistrado() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         boleto.publishDomainEvent(publisher);
 
         final var cobranca = new Cobranca("123", 1, 1, 10);
@@ -63,7 +63,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
                 .findByConvenioAndNossoNumero(
-                        eq(expectedConvenio), eq(expectedNumeroTituloCliente)
+                        eq(expectedConvenio), eq(expectedNossoNumero)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
         verify(boletoGateway).update(captor.capture());
@@ -71,7 +71,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boletoUpdated);
         Assertions.assertEquals(expectedId, boletoUpdated.getId());
         Assertions.assertEquals(expectedConvenio, boletoUpdated.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNossoNumero());
+        Assertions.assertEquals(expectedNossoNumero, boletoUpdated.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boletoUpdated.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), boletoUpdated.getCriadoEm());
 //        Assertions.assertTrue(boleto.getAtualizadoEm().isBefore(boletoUpdated.getAtualizadoEm()));
@@ -102,9 +102,9 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
     void givenCobrancaNaoRegistrada_whenCallsConfirmaRegistro_shouldUpdateStatusNaoRegistrado() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         boleto.publishDomainEvent(publisher);
 
         final var expectedId = boleto.getId();
@@ -123,7 +123,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
                 .findByConvenioAndNossoNumero(
-                        eq(expectedConvenio), eq(expectedNumeroTituloCliente)
+                        eq(expectedConvenio), eq(expectedNossoNumero)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
         verify(boletoGateway).update(captor.capture());
@@ -131,7 +131,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boletoUpdated);
         Assertions.assertEquals(expectedId, boletoUpdated.getId());
         Assertions.assertEquals(expectedConvenio, boletoUpdated.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNossoNumero());
+        Assertions.assertEquals(expectedNossoNumero, boletoUpdated.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boletoUpdated.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), boletoUpdated.getCriadoEm());
     }

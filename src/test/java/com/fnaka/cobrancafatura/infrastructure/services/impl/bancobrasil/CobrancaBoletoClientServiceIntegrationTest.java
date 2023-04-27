@@ -33,13 +33,13 @@ class CobrancaBoletoClientServiceIntegrationTest {
     }
 
     @Test
-    void givenAValidConvenioAndNumeroTituloCliente_whenCallsDetalhaBoleto_shouldReturnCobranca() {
+    void givenAValidConvenioAndNossoNumero_whenCallsDetalhaBoleto_shouldReturnCobranca() {
         // given
         final var expectedConvenio = 3128557;
-        final var expectedNumeroTituloCliente = "00031285573000000008";
+        final var expectedNossoNumero = "00031285573000000008";
 
         // when
-        final var actualCobrancaBoleto = cobrancaBoletoClientService.detalhaCobrancaBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var actualCobrancaBoleto = cobrancaBoletoClientService.detalhaCobrancaBoleto(expectedConvenio, expectedNossoNumero);
 
         // then
         Assertions.assertNotNull(actualCobrancaBoleto);
@@ -47,20 +47,20 @@ class CobrancaBoletoClientServiceIntegrationTest {
 
         verify(oAuthClientService).generateToken();
         verify(bancoBrasilCredential).getDeveloperApplicationKey();
-        verify(cobrancaBoletoFeignClient).detalhaBoleto(anyString(), eq(expectedNumeroTituloCliente), anyString(), eq(expectedConvenio));
+        verify(cobrancaBoletoFeignClient).detalhaBoleto(anyString(), eq(expectedNossoNumero), anyString(), eq(expectedConvenio));
     }
 
     @Test
-    void givenAnInvalidNumeroTituloCliente_whenCallsDetalhaBoleto_shouldThrowsBadRequestException() {
+    void givenAnInvalidNossoNumero_whenCallsDetalhaBoleto_shouldThrowsBadRequestException() {
         // given
         final var expectedConvenio = 3128557;
-        final var expectedNumeroTituloCliente = "10031285573000000008";
+        final var expectedNossoNumero = "10031285573000000008";
         final var expectedErrorMessage = "{\"errors\":[{\"code\":\"4678420.1\",\"message\":\"Campo nosso número preenchido com dados inválidos.\"}]}";
 
         // when
         final var actualException = Assertions.assertThrows(
                 BadRequestException.class,
-                () -> cobrancaBoletoClientService.detalhaCobrancaBoleto(expectedConvenio, expectedNumeroTituloCliente)
+                () -> cobrancaBoletoClientService.detalhaCobrancaBoleto(expectedConvenio, expectedNossoNumero)
         );
 
         // then
@@ -69,6 +69,6 @@ class CobrancaBoletoClientServiceIntegrationTest {
 
         verify(oAuthClientService).generateToken();
         verify(bancoBrasilCredential).getDeveloperApplicationKey();
-        verify(cobrancaBoletoFeignClient).detalhaBoleto(anyString(), eq(expectedNumeroTituloCliente), anyString(), eq(expectedConvenio));
+        verify(cobrancaBoletoFeignClient).detalhaBoleto(anyString(), eq(expectedNossoNumero), anyString(), eq(expectedConvenio));
     }
 }

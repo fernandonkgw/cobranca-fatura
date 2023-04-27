@@ -4,5 +4,5 @@ import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
 
 public interface CobrancaBoletoService {
 
-    Cobranca detalhaCobrancaBoleto(Integer convenio, String numeroTituloCliente);
+    Cobranca detalhaCobrancaBoleto(Integer convenio, String nossoNumero);
 }

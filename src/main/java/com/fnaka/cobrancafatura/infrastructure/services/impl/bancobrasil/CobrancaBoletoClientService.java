@@ -16,18 +16,24 @@ public class CobrancaBoletoClientService implements CobrancaBoletoService {
     public CobrancaBoletoClientService(
             OAuthClientService oAuthClientService,
             BancoBrasilCredential bancoBrasilCredential,
-            CobrancaBoletoFeignClient cobrancaBoletoFeignClient) {
+            CobrancaBoletoFeignClient cobrancaBoletoFeignClient
+    ) {
         this.oAuthClientService = oAuthClientService;
         this.bancoBrasilCredential = bancoBrasilCredential;
         this.cobrancaBoletoFeignClient = cobrancaBoletoFeignClient;
     }
 
     @Override
-    public Cobranca detalhaCobrancaBoleto(Integer convenio, String numeroTituloCliente) {
+    public Cobranca detalhaCobrancaBoleto(Integer convenio, String nossoNumero) {
         final var token = oAuthClientService.generateToken();
         final var bearerToken = token.getBearerToken();
         final var developerApplicationKey = bancoBrasilCredential.getDeveloperApplicationKey();
-        final var cobrancaResponse = cobrancaBoletoFeignClient.detalhaBoleto(bearerToken, numeroTituloCliente, developerApplicationKey, convenio);
+        final var cobrancaResponse = cobrancaBoletoFeignClient.detalhaBoleto(
+                bearerToken,
+                nossoNumero,
+                developerApplicationKey,
+                convenio
+        );
 
         return cobrancaResponse.toDomain();
     }

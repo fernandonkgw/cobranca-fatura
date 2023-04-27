@@ -34,10 +34,10 @@ class BuscaBoletoPorIdUseCaseTest extends UseCaseTest {
     void givenAValidId_whenCallsBuscaBoletoPorId_shouldReturnOutput() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
         final var expectedStatus = BoletoStatus.CRIADO;
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
 
         when(boletoGateway.findById(any()))
@@ -50,7 +50,7 @@ class BuscaBoletoPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
         Assertions.assertEquals(expectedConvenio, actualOutput.convenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualOutput.numeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, actualOutput.nossoNumero());
         Assertions.assertEquals(expectedStatus, actualOutput.status());
         Assertions.assertEquals(boleto.getCriadoEm(), actualOutput.criadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), actualOutput.atualizadoEm());

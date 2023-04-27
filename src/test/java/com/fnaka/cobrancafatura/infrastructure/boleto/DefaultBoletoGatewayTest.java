@@ -27,9 +27,9 @@ class DefaultBoletoGatewayTest {
     void givenAValidBoleto_whenCallsCreate_shouldPersistIt() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
 
         // when
@@ -38,13 +38,13 @@ class DefaultBoletoGatewayTest {
         // then
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNossoNumero());
+        Assertions.assertEquals(expectedNossoNumero, actualBoleto.getNossoNumero());
 
         final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedId.getValue(), persistedBoleto.getId());
         Assertions.assertEquals(expectedConvenio, persistedBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, persistedBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNumeroTituloCliente());
         Assertions.assertEquals(boleto.getStatus(), persistedBoleto.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), persistedBoleto.getCriadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), persistedBoleto.getAtualizadoEm());
@@ -55,10 +55,10 @@ class DefaultBoletoGatewayTest {
     void givenAValidBoletoRegistrado_whenCallsUpdate_shouldUpdateIt() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
         final var exoectedStatus = BoletoStatus.REGISTRADO;
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
 
         boleto.registroConfirmado();
@@ -69,14 +69,14 @@ class DefaultBoletoGatewayTest {
         // then
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNossoNumero());
+        Assertions.assertEquals(expectedNossoNumero, actualBoleto.getNossoNumero());
         Assertions.assertEquals(exoectedStatus, actualBoleto.getStatus());
 
         final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
 
         Assertions.assertEquals(expectedId.getValue(), persistedBoleto.getId());
         Assertions.assertEquals(expectedConvenio, persistedBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, persistedBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNumeroTituloCliente());
         Assertions.assertEquals(boleto.getStatus(), persistedBoleto.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), persistedBoleto.getCriadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), persistedBoleto.getAtualizadoEm());

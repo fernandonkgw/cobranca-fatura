@@ -8,7 +8,7 @@ import java.time.Instant;
 public record DetalhaBoletoResponse(
         String id,
         Integer convenio,
-        String numeroTituloCliente,
+        String nossoNumero,
         BoletoStatus status,
         Instant criadoEm,
         Instant atualizadoEm
@@ -18,7 +18,7 @@ public record DetalhaBoletoResponse(
         return new DetalhaBoletoResponse(
                 output.id(),
                 output.convenio(),
-                output.numeroTituloCliente(),
+                output.nossoNumero(),
                 output.status(),
                 output.criadoEm(),
                 output.atualizadoEm()

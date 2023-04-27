@@ -25,18 +25,18 @@ class CobrancaBoletoFeignClientIntegrationTest {
     }
 
     @Test
-    void givenValidNumeroTituloClienteAndCovenio_whenCallsDetalhaBoleto_shouldReturnCobranca() {
+    void givenValidNossoNumeroAndCovenio_whenCallsDetalhaBoleto_shouldReturnCobranca() {
         // given
         final var token = oAuthClientService.generateToken();
         final var authorization = token.getBearerToken();
-        final var expectedNumeroTituloCliente = "00031285573000000003";
+        final var expectedNossoNumero = "00031285573000000003";
         final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
         final var expectedNumeroConvenio = 3128557;
 
         // when
         final var actualCobrancaResponse = cobrancaBoletoFeignClient.detalhaBoleto(
                 authorization,
-                expectedNumeroTituloCliente,
+                expectedNossoNumero,
                 expectedDevAppKey,
                 expectedNumeroConvenio
         );
@@ -47,11 +47,11 @@ class CobrancaBoletoFeignClientIntegrationTest {
     }
 
     @Test
-    void givenInvalidNumeroTituloCliente_whenCallsDetalhaBoleto_shouldThrowsBadRequestException() {
+    void givenInvalidNossoNumero_whenCallsDetalhaBoleto_shouldThrowsBadRequestException() {
         // given
         final var token = oAuthClientService.generateToken();
         final var authorization = token.getBearerToken();
-        final var expectedNumeroTituloCliente = "00041285573100020000";
+        final var expectedNossoNumero = "00041285573100020000";
         final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
         final var expectedNumeroConvenio = 3128557;
         final var expectedErrorMessage = "{\"errors\":[{\"code\":\"4678420.1\",\"message\":\"Campo nosso número preenchido com dados inválidos.\"}]}";
@@ -61,7 +61,7 @@ class CobrancaBoletoFeignClientIntegrationTest {
                 BadRequestException.class,
                 () -> cobrancaBoletoFeignClient.detalhaBoleto(
                         authorization,
-                        expectedNumeroTituloCliente,
+                        expectedNossoNumero,
                         expectedDevAppKey,
                         expectedNumeroConvenio
                 )

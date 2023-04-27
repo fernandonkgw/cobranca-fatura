@@ -1,7 +1,6 @@
 package com.fnaka.cobrancafatura.application.boleto.busca;
 
 import com.fnaka.cobrancafatura.IntegrationTest;
-import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
@@ -11,16 +10,10 @@ import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntit
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @IntegrationTest
 class BuscaBoletoPorIdUseCaseIntegrationTest {
@@ -38,10 +31,10 @@ class BuscaBoletoPorIdUseCaseIntegrationTest {
     void givenAValidId_whenCallsBuscaBoletoPorId_shouldReturnOutput() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
         final var expectedStatus = BoletoStatus.CRIADO;
 
-        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNumeroTituloCliente);
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
 
         boletoRepository.saveAndFlush(BoletoJpaEntity.from(boleto));
@@ -55,7 +48,7 @@ class BuscaBoletoPorIdUseCaseIntegrationTest {
         Assertions.assertNotNull(actualOutput);
         Assertions.assertEquals(expectedId.getValue(), actualOutput.id());
         Assertions.assertEquals(expectedConvenio, actualOutput.convenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualOutput.numeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, actualOutput.nossoNumero());
         Assertions.assertEquals(expectedStatus, actualOutput.status());
         Assertions.assertEquals(boleto.getCriadoEm(), actualOutput.criadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), actualOutput.atualizadoEm());

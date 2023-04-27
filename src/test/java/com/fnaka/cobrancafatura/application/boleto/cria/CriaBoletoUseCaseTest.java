@@ -33,10 +33,10 @@ class CriaBoletoUseCaseTest extends UseCaseTest {
     void givenAValidCommand_whenCallsCriaBoleto_shouldReturnOutput() {
         // given
         final var expectedConvenio = 1234567;
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
         final var expectedStatus = BoletoStatus.CRIADO;
 
-        final var command = CriaBoletoCommand.with(expectedConvenio, expectedNumeroTituloCliente);
+        final var command = CriaBoletoCommand.with(expectedConvenio, expectedNossoNumero);
 
         when(boletoGateway.create(ArgumentMatchers.any()))
                 .thenAnswer(returnsFirstArg());
@@ -54,7 +54,7 @@ class CriaBoletoUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boleto);
         Assertions.assertNotNull(boleto.getId());
         Assertions.assertEquals(expectedConvenio, boleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boleto.getNossoNumero());
+        Assertions.assertEquals(expectedNossoNumero, boleto.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boleto.getStatus());
         Assertions.assertNotNull(boleto.getCriadoEm());
         Assertions.assertNotNull(boleto.getAtualizadoEm());
@@ -63,11 +63,11 @@ class CriaBoletoUseCaseTest extends UseCaseTest {
     @Test
     void givenAInvalidNullConvenio_whenCallsCriaBoleto_shouldThrowsException() {
         // given
-        final var expectedNumeroTituloCliente = "12345678901234567890";
+        final var expectedNossoNumero = "12345678901234567890";
         final var expectedErrorMessage = "'convenio' should not be null";
         final var expectedErrorCode = ErrorCode.CFA_001;
 
-        final var command = CriaBoletoCommand.with(null, expectedNumeroTituloCliente);
+        final var command = CriaBoletoCommand.with(null, expectedNossoNumero);
 
         // when
         final var actualException = Assertions.assertThrows(
