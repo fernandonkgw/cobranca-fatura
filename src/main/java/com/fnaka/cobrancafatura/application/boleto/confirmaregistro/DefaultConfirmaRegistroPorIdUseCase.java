@@ -27,9 +27,9 @@ public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUs
                 .orElseThrow(() -> DomainException.with(Error.with(ErrorCode.CFA_006)));
 
         final var convenio = boleto.getConvenio();
-        final var numeroTituloCliente = boleto.getNumeroTituloCliente();
+        final var numeroTituloCliente = boleto.getNossoNumero();
 
-        if (cobrancaGateway.findByConvenioAndNumeroTituloCliente(convenio, numeroTituloCliente).isPresent()) {
+        if (cobrancaGateway.findByConvenioAndNossoNumero(convenio, numeroTituloCliente).isPresent()) {
             boleto.registroConfirmado();
         } else {
             boleto.registroNaoEncontrado();

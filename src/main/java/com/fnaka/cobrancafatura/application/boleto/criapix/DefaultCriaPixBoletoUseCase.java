@@ -31,7 +31,7 @@ public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase{
         }
 
         final var convenio = boleto.getConvenio();
-        final var numeroTituloCliente = boleto.getNumeroTituloCliente();
+        final var numeroTituloCliente = boleto.getNossoNumero();
 
         final var pixBoleto = cobrancaGateway.createPix(convenio, numeroTituloCliente);
         boleto.criaPix(pixBoleto);

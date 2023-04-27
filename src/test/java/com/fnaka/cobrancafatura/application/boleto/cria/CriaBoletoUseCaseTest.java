@@ -54,7 +54,7 @@ class CriaBoletoUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boleto);
         Assertions.assertNotNull(boleto.getId());
         Assertions.assertEquals(expectedConvenio, boleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, boleto.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boleto.getStatus());
         Assertions.assertNotNull(boleto.getCriadoEm());
         Assertions.assertNotNull(boleto.getAtualizadoEm());

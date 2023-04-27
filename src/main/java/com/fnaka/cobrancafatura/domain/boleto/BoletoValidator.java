@@ -8,6 +8,7 @@ import com.fnaka.cobrancafatura.domain.validation.Validator;
 public class BoletoValidator extends Validator {
 
     private static final int NUMERO_CONVENIO_VALID_LENGTH = 7;
+    private static final int NOSSO_NUMERO_VALID_LENGTH = 20;
     private final Boleto boleto;
 
     protected BoletoValidator(final Boleto boleto, final ValidationHandler aHandler) {
@@ -18,7 +19,7 @@ public class BoletoValidator extends Validator {
     @Override
     public void validate() {
         checkConvenioConstraints();
-        checkNumeroTituloClienteConstraints();
+        checkNossoNumeroConstraints();
     }
 
     private void checkConvenioConstraints() {
@@ -40,15 +41,21 @@ public class BoletoValidator extends Validator {
         }
     }
 
-    private void checkNumeroTituloClienteConstraints() {
-        final var numeroTituloCliente = this.boleto.getNumeroTituloCliente();
-        if (numeroTituloCliente == null) {
+    private void checkNossoNumeroConstraints() {
+        final var nossoNumero = this.boleto.getNossoNumero();
+        if (nossoNumero == null) {
             this.validationHandler().append(Error.with(ErrorCode.CFA_003));
             return;
         }
 
-        if (numeroTituloCliente.isBlank()) {
+        if (nossoNumero.isBlank()) {
             this.validationHandler().append(Error.with(ErrorCode.CFA_004));
+            return;
+        }
+
+        final var length = nossoNumero.length();
+        if (length != NOSSO_NUMERO_VALID_LENGTH) {
+            this.validationHandler().append(Error.with(ErrorCode.CFA_008, nossoNumero));
         }
     }
 }

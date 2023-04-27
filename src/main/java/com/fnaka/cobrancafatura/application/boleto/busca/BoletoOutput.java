@@ -18,7 +18,7 @@ public record BoletoOutput(
         return new BoletoOutput(
                 boleto.getId().getValue(),
                 boleto.getConvenio(),
-                boleto.getNumeroTituloCliente(),
+                boleto.getNossoNumero(),
                 boleto.getStatus(),
                 boleto.getCriadoEm(),
                 boleto.getAtualizadoEm()

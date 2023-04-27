@@ -19,10 +19,10 @@ public class DefaultCobrancaGateway implements CobrancaGateway {
     }
 
     @Override
-    public Optional<Cobranca> findByConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente) {
+    public Optional<Cobranca> findByConvenioAndNossoNumero(Integer convenio, String nossoNumero) {
 
         try {
-            return Optional.of(cobrancaBoletoService.detalhaCobrancaBoleto(convenio, numeroTituloCliente));
+            return Optional.of(cobrancaBoletoService.detalhaCobrancaBoleto(convenio, nossoNumero));
         } catch (BadRequestException e) {
             return Optional.empty();
         }
@@ -30,7 +30,7 @@ public class DefaultCobrancaGateway implements CobrancaGateway {
     }
 
     @Override
-    public PixBoleto createPix(Integer convenio, String numeroTituloCliente) {
+    public PixBoleto createPix(Integer convenio, String nossoNumero) {
         return null;
     }
 }

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface CobrancaGateway {
 
-    Optional<Cobranca> findByConvenioAndNumeroTituloCliente(Integer convenio, String numeroTituloCliente);
+    Optional<Cobranca> findByConvenioAndNossoNumero(Integer convenio, String nossoNumero);
 
-    PixBoleto createPix(Integer convenio, String numeroTituloCliente);
+    PixBoleto createPix(Integer convenio, String nossoNumero);
 }

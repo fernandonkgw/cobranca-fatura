@@ -53,7 +53,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.findByConvenioAndNumeroTituloCliente(any(), any()))
+        when(cobrancaGateway.findByConvenioAndNossoNumero(any(), any()))
                 .thenReturn(Optional.of(cobranca));
 
         // when
@@ -62,7 +62,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         // then
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
-                .findByConvenioAndNumeroTituloCliente(
+                .findByConvenioAndNossoNumero(
                         eq(expectedConvenio), eq(expectedNumeroTituloCliente)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
@@ -71,7 +71,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boletoUpdated);
         Assertions.assertEquals(expectedId, boletoUpdated.getId());
         Assertions.assertEquals(expectedConvenio, boletoUpdated.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boletoUpdated.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), boletoUpdated.getCriadoEm());
 //        Assertions.assertTrue(boleto.getAtualizadoEm().isBefore(boletoUpdated.getAtualizadoEm()));
@@ -113,7 +113,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.findByConvenioAndNumeroTituloCliente(any(), any()))
+        when(cobrancaGateway.findByConvenioAndNossoNumero(any(), any()))
                 .thenReturn(Optional.empty());
 
         // when
@@ -122,7 +122,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         // then
         verify(boletoGateway).findById(eq(expectedId));
         verify(cobrancaGateway)
-                .findByConvenioAndNumeroTituloCliente(
+                .findByConvenioAndNossoNumero(
                         eq(expectedConvenio), eq(expectedNumeroTituloCliente)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
@@ -131,7 +131,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertNotNull(boletoUpdated);
         Assertions.assertEquals(expectedId, boletoUpdated.getId());
         Assertions.assertEquals(expectedConvenio, boletoUpdated.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, boletoUpdated.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boletoUpdated.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), boletoUpdated.getCriadoEm());
     }

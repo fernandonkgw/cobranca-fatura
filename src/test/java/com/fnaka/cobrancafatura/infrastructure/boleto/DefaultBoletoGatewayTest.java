@@ -38,7 +38,7 @@ class DefaultBoletoGatewayTest {
         // then
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNossoNumero());
 
         final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
 
@@ -69,7 +69,7 @@ class DefaultBoletoGatewayTest {
         // then
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, actualBoleto.getNossoNumero());
         Assertions.assertEquals(exoectedStatus, actualBoleto.getStatus());
 
         final var persistedBoleto = boletoRepository.findById(expectedId.getValue()).get();
