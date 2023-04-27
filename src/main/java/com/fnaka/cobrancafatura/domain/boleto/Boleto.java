@@ -59,6 +59,21 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return this;
     }
 
+    public boolean isRegistrado() {
+        return BoletoStatus.REGISTRADO.equals(this.status);
+    }
+
+    public Boleto registroNaoEncontrado() {
+        this.status = BoletoStatus.NAO_REGISTRADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new BoletoNaoRegistradoEvent(this.getId().getValue()));
+        return this;
+    }
+
+    public boolean isNaoRegistrado() {
+        return BoletoStatus.NAO_REGISTRADO.equals(this.status);
+    }
+
     @Override
     public void validate(ValidationHandler handler) {
         new BoletoValidator(this, handler).validate();
@@ -90,20 +105,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
 
     private void selfValidate() {
         validate(new ThrowsValidationHandler());
-    }
-
-    public void registroNaoEncontrado() {
-        this.status = BoletoStatus.NAO_REGISTRADO;
-        this.atualizadoEm = InstantUtils.now();
-        this.registerEvent(new BoletoNaoRegistradoEvent(this.getId().getValue()));
-    }
-
-    public boolean isRegistrado() {
-        return BoletoStatus.REGISTRADO.equals(this.status);
-    }
-
-    public boolean isNaoRegistrado() {
-        return BoletoStatus.NAO_REGISTRADO.equals(this.status);
     }
 
     public void criaPix(PixBoleto pixBoleto) {
