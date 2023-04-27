@@ -52,6 +52,13 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return new Boleto(id, convenio, nossoNumero, status, criadoEm, atualizadoEm);
     }
 
+    public Boleto registroConfirmado() {
+        this.status = BoletoStatus.REGISTRADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new BoletoRegistradoEvent(this.getId().getValue()));
+        return this;
+    }
+
     @Override
     public void validate(ValidationHandler handler) {
         new BoletoValidator(this, handler).validate();
@@ -83,12 +90,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
 
     private void selfValidate() {
         validate(new ThrowsValidationHandler());
-    }
-
-    public void registroConfirmado() {
-        this.status = BoletoStatus.REGISTRADO;
-        this.atualizadoEm = InstantUtils.now();
-        this.registerEvent(new BoletoRegistradoEvent(this.getId().getValue()));
     }
 
     public void registroNaoEncontrado() {
