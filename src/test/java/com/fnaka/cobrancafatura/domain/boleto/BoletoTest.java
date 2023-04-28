@@ -174,7 +174,7 @@ class BoletoTest {
         Thread.sleep(100);
 
         // when
-        final var actualBoleto = boleto.registroConfirmado();
+        final var actualBoleto = boleto.confirmaRegistro();
 
         // then
         Assertions.assertNotNull(actualBoleto);
@@ -209,6 +209,43 @@ class BoletoTest {
         Assertions.assertNotNull(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
         Assertions.assertTrue(actualBoleto.isNaoRegistrado());
         final var event = (BoletoNaoRegistradoEvent) actualBoleto.getDomainEvent();
+        Assertions.assertEquals(expectedId.getValue(), event.id());
+        Assertions.assertEquals(expectedStatus, event.status());
+    }
+
+    @Test
+    void givenValidParams_whenCallsCriaPix_shouldUpdateStatus() throws InterruptedException {
+        // given
+        final var expectedConvenio = 1234567;
+        final var expectedNossoNumero = "00031285573000000008";
+        final var expectedStatus = BoletoStatus.PIX_CRIADO;
+        final var expectedUrl = "qrcodepix-h.bb.com.br/pix/v2/cobv/e09b4025-1598-4688-acb6-0fe20fe61456";
+        final var expectedTxId = "BOLETO31285573000000009DATA27042023";
+        final var expectedEmv = "00020101021226920014br.gov.bcb.pix2570qrcodepix-h.bb.com.br/pix/v2/cobv/e09b4025-1598-4688-acb6-0fe20fe61456520400005303986540512.345802BR5919PADARIA PESSOA ROSA6008BRASILIA62070503***6304A705";
+
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
+        final var expectedId = boleto.getId();
+        final var beforeUpdate = boleto.getAtualizadoEm();
+        Thread.sleep(100);
+        final var pix = new PixBoleto(
+                expectedUrl,
+                expectedTxId,
+                expectedEmv
+        );
+
+        // when
+        final var actualBoleto = boleto.criaPix(pix);
+
+        // then
+        Assertions.assertNotNull(actualBoleto);
+        Assertions.assertNotNull(actualBoleto.getId());
+        Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
+        Assertions.assertNotNull(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        final var actualPix = actualBoleto.getPix();
+        Assertions.assertEquals(expectedUrl, actualPix.url());
+        Assertions.assertEquals(expectedTxId, actualPix.txId());
+        Assertions.assertEquals(expectedEmv, actualPix.emv());
+        final var event = (PixCriadoEvent) actualBoleto.getDomainEvent();
         Assertions.assertEquals(expectedId.getValue(), event.id());
         Assertions.assertEquals(expectedStatus, event.status());
     }

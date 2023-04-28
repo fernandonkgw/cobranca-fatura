@@ -71,4 +71,58 @@ class CobrancaBoletoFeignClientIntegrationTest {
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
     }
+
+    @Test
+    void givenAValidNossoNumeroAndConvenio_whenCallsGeraPixBoleto_shouldReturnPix() {
+        // given
+        final var token = oAuthClientService.generateToken();
+        final var bearerToken = token.getBearerToken();
+        final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
+        final var expectedNossoNumero = "00031285573000000012"; // precisa registrar um novo boleto antes de executar o test
+        final var expectedNumeroConvenio = 3128557;
+
+        final var request = new GeraPixBoletoRequest(expectedNumeroConvenio);
+
+        // when
+        final var actualResponse = cobrancaBoletoFeignClient.geraPixBoleto(
+                bearerToken,
+                expectedDevAppKey,
+                expectedNossoNumero,
+                request
+        );
+
+        // then
+        Assertions.assertNotNull(actualResponse);
+        Assertions.assertNotNull(actualResponse.chave());
+        Assertions.assertNotNull(actualResponse.url());
+        Assertions.assertNotNull(actualResponse.txId());
+        Assertions.assertNotNull(actualResponse.emv());
+    }
+
+    @Test
+    void givenAnInvalidNossoNumero_whenCallsGeraPixBoleto_shouldThrowsBadRequestException() {
+        // given
+        final var token = oAuthClientService.generateToken();
+        final var bearerToken = token.getBearerToken();
+        final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
+        final var expectedNossoNumero = "00031285573000000012";
+        final var expectedNumeroConvenio = 3128557;
+
+        final var request = new GeraPixBoletoRequest(expectedNumeroConvenio);
+
+        // when
+        final var actualException = Assertions.assertThrows(
+                BadRequestException.class,
+                () -> cobrancaBoletoFeignClient.geraPixBoleto(
+                        bearerToken,
+                        expectedDevAppKey,
+                        expectedNossoNumero,
+                        request
+                )
+        );
+
+        // then
+        Assertions.assertNotNull(actualException);
+
+    }
 }

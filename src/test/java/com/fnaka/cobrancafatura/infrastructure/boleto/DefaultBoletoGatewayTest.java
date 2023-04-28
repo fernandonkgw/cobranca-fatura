@@ -61,7 +61,7 @@ class DefaultBoletoGatewayTest {
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
 
-        boleto.registroConfirmado();
+        boleto.confirmaRegistro();
 
         // when
         final var actualBoleto = boletoGateway.update(boleto);

@@ -14,8 +14,7 @@ import org.mockito.Mock;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,7 +42,6 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         final var expectedNossoNumero = "12345678901234567890";
 
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
-        boleto.publishDomainEvent(publisher);
 
         final var cobranca = new Cobranca("123", 1, 1, 10);
 
@@ -53,7 +51,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.findByConvenioAndNossoNumero(any(), any()))
+        when(cobrancaGateway.findByConvenioAndNossoNumero(anyInt(), anyString()))
                 .thenReturn(Optional.of(cobranca));
 
         // when
