@@ -22,7 +22,8 @@ public class Boleto extends AggregateRoot<BoletoID> {
             final String nossoNumero,
             final BoletoStatus status,
             final Instant criadoEm,
-            final Instant atualizadoEm
+            final Instant atualizadoEm,
+            final PixBoleto pix
     ) {
         super(anId);
         this.convenio = convenio;
@@ -30,13 +31,14 @@ public class Boleto extends AggregateRoot<BoletoID> {
         this.status = status;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+        this.pix = pix;
         selfValidate();
     }
 
     public static Boleto newBoleto(final Integer convenio, final String nossoNumero) {
         final var anId = BoletoID.unique();
         final var agora = InstantUtils.now();
-        final var result = new Boleto(anId, convenio, nossoNumero, BoletoStatus.CRIADO, agora, agora);
+        final var result = new Boleto(anId, convenio, nossoNumero, BoletoStatus.CRIADO, agora, agora, null);
         result.registerEvent(new BoletoCriadoEvent(anId.getValue()));
         return result;
     }
@@ -49,7 +51,25 @@ public class Boleto extends AggregateRoot<BoletoID> {
             final Instant criadoEm,
             final Instant atualizadoEm
     ) {
-        return new Boleto(id, convenio, nossoNumero, status, criadoEm, atualizadoEm);
+        return new Boleto(id, convenio, nossoNumero, status, criadoEm, atualizadoEm, null);
+    }
+
+    public static Boleto with(
+            final BoletoID id,
+            final Integer convenio,
+            final String nossoNumero,
+            final BoletoStatus status,
+            final Instant criadoEm,
+            final Instant atualizadoEm,
+            final String url,
+            final String txId,
+            final String emv
+    ) {
+        if (url != null && txId != null && emv != null) {
+            final var pix = new PixBoleto(url, txId, emv);
+            return new Boleto(id, convenio, nossoNumero, status, criadoEm, atualizadoEm, pix);
+        }
+        return with(id, convenio, nossoNumero, status, criadoEm, atualizadoEm);
     }
 
     public Boleto confirmaRegistro() {

@@ -1,8 +1,6 @@
 package com.fnaka.cobrancafatura.application.boleto.cria;
 
 import com.fnaka.cobrancafatura.IntegrationTest;
-import com.fnaka.cobrancafatura.UseCaseTest;
-import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
@@ -10,19 +8,11 @@ import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.util.List;
-
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @IntegrationTest
 class CriaBoletoUseCaseIntegrationTest {
@@ -56,7 +46,7 @@ class CriaBoletoUseCaseIntegrationTest {
 
 
         Assertions.assertEquals(expectedConvenio, actualBoleto.getConvenio());
-        Assertions.assertEquals(expectedNossoNumero, actualBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, actualBoleto.getNossoNumero());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
         Assertions.assertNotNull(actualBoleto.getCriadoEm());
         Assertions.assertNotNull(actualBoleto.getAtualizadoEm());

@@ -1,6 +1,5 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
-import com.fnaka.cobrancafatura.IntegrationTest;
 import com.fnaka.cobrancafatura.ServiceTest;
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.BancoBrasilCredential;
 import com.fnaka.cobrancafatura.infrastructure.utils.AuthorizationUtils;

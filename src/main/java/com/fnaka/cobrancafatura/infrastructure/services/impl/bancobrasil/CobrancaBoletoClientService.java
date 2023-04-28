@@ -1,6 +1,7 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
 import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
+import com.fnaka.cobrancafatura.domain.boleto.PixBoleto;
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.BancoBrasilCredential;
 import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
 import com.fnaka.cobrancafatura.infrastructure.utils.AuthorizationUtils;
@@ -36,5 +37,20 @@ public class CobrancaBoletoClientService implements CobrancaBoletoService {
         );
 
         return cobrancaResponse.toDomain();
+    }
+
+    @Override
+    public PixBoleto createPix(Integer convenio, String nossoNumero) {
+        final var token = oAuthClientService.generateToken();
+        final var bearerToken = token.getBearerToken();
+        final var developerApplicationKey = bancoBrasilCredential.getDeveloperApplicationKey();
+        final var request = new GeraPixBoletoRequest(convenio);
+        final var pixResponse = cobrancaBoletoFeignClient.geraPixBoleto(
+                bearerToken,
+                developerApplicationKey,
+                nossoNumero,
+                request
+        );
+        return new PixBoleto(pixResponse.url(), pixResponse.txId(), pixResponse.emv());
     }
 }

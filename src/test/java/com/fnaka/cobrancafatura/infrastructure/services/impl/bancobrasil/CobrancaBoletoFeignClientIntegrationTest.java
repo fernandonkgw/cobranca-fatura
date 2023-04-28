@@ -54,7 +54,9 @@ class CobrancaBoletoFeignClientIntegrationTest {
         final var expectedNossoNumero = "00041285573100020000";
         final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
         final var expectedNumeroConvenio = 3128557;
-        final var expectedErrorMessage = "{\"errors\":[{\"code\":\"4678420.1\",\"message\":\"Campo nosso número preenchido com dados inválidos.\"}]}";
+        final var expectedErrorMessage = "Bad Request";
+        final var expectedResponseBody = "{\"errors\":[{\"code\":\"4678420.1\",\"message\":\"Campo nosso número preenchido com dados inválidos.\"}]}";
+        final var expectedUrl = "https://api.sandbox.bb.com.br/cobrancas/v2/boletos/00041285573100020000?gw-dev-app-key=daae06a486398c4dddca2c6ffcbdab1a&numeroConvenio=3128557";
 
         // when
         final var actualException = Assertions.assertThrows(
@@ -70,6 +72,8 @@ class CobrancaBoletoFeignClientIntegrationTest {
         // then
         Assertions.assertNotNull(actualException);
         Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedResponseBody, actualException.getResponseBody());
+        Assertions.assertEquals(expectedUrl, actualException.getUrl());
     }
 
     @Test
@@ -107,6 +111,10 @@ class CobrancaBoletoFeignClientIntegrationTest {
         final var expectedDevAppKey = bancoBrasilCredential.getDeveloperApplicationKey();
         final var expectedNossoNumero = "00031285573000000012";
         final var expectedNumeroConvenio = 3128557;
+        final var expectedRequestBody = "{\"numeroConvenio\":3128557}";
+        final var expectedErrorMessage = "Bad Request";
+        final var expectedResponseBody = "{\"erros\":[{\"codigo\":\"4432632\",\"versao\":\"1\",\"mensagem\":\"Já existe Pix cadastrado para o boleto\",\"ocorrencia\"";
+        final var expectedUrl = "https://api.sandbox.bb.com.br/cobrancas/v2/boletos/00031285573000000012/gerar-pix?gw-dev-app-key=daae06a486398c4dddca2c6ffcbdab1a";
 
         final var request = new GeraPixBoletoRequest(expectedNumeroConvenio);
 
@@ -123,6 +131,9 @@ class CobrancaBoletoFeignClientIntegrationTest {
 
         // then
         Assertions.assertNotNull(actualException);
-
+        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedRequestBody, actualException.getRequestBody());
+        Assertions.assertTrue(actualException.getResponseBody().contains(expectedResponseBody));
+        Assertions.assertEquals(expectedUrl, actualException.getUrl());
     }
 }

@@ -14,9 +14,9 @@ public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
     @Override
     public CriaBoletoOutput execute(final CriaBoletoCommand aCommand) {
         final var convenio = aCommand.convenio();
-        final var numeroTituloCliente = aCommand.numeroTituloCliente();
+        final var nossoNumero = aCommand.nossoNumero();
 
-        final var boleto = Boleto.newBoleto(convenio, numeroTituloCliente);
+        final var boleto = Boleto.newBoleto(convenio, nossoNumero);
 
         return CriaBoletoOutput.from(this.boletoGateway.create(boleto));
     }

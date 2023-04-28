@@ -73,6 +73,6 @@ public class BoletoAPITest {
         verify(criaBoletoUseCase).execute(captor.capture());
         final var actualCommand = captor.getValue();
         Assertions.assertEquals(expectedConvenio, actualCommand.convenio());
-        Assertions.assertEquals(expectedNumeroTituloCliente, actualCommand.numeroTituloCliente());
+        Assertions.assertEquals(expectedNumeroTituloCliente, actualCommand.nossoNumero());
     }
 }

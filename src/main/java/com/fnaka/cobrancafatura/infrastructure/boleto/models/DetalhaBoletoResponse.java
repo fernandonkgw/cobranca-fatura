@@ -11,7 +11,8 @@ public record DetalhaBoletoResponse(
         String nossoNumero,
         BoletoStatus status,
         Instant criadoEm,
-        Instant atualizadoEm
+        Instant atualizadoEm,
+        DetalhaPixBoletoResponse pix
 
 ) {
     public static DetalhaBoletoResponse from(BoletoOutput output) {
@@ -21,7 +22,8 @@ public record DetalhaBoletoResponse(
                 output.nossoNumero(),
                 output.status(),
                 output.criadoEm(),
-                output.atualizadoEm()
+                output.atualizadoEm(),
+                DetalhaPixBoletoResponse.from(output.pix())
         );
     }
 }

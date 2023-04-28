@@ -32,7 +32,7 @@ public class BoletoCriadoListener {
         try {
             this.confirmaRegistroPorIdUseCase.execute(boletoCriado.id());
         } catch (DomainException e) {
-            LOG.warn("Error {}", e.getFirstError().message());
+            LOG.warn("Error {} param {}", e.getFirstError().message(), e.getFirstError().getFirstParam());
         }
     }
 }

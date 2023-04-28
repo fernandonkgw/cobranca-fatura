@@ -18,8 +18,8 @@ public class BoletoJpaEntity {
     @Column(name = "convenio", nullable = false)
     private Integer convenio;
 
-    @Column(name = "numero_titulo_cliente", nullable = false)
-    private String numeroTituloCliente;
+    @Column(name = "nosso_numero", nullable = false)
+    private String nossoNumero;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -31,33 +31,55 @@ public class BoletoJpaEntity {
     @Column(name = "atualizado_em", nullable = false)
     private Instant atualizadoEm;
 
+    @Column(name = "url")
+    private String url;
+
+    @Column(name = "txid")
+    private String txId;
+
+    @Column(name = "emv")
+    private String emv;
+
     public BoletoJpaEntity() {
     }
 
     private BoletoJpaEntity(
             final String id,
             final Integer convenio,
-            final String numeroTituloCliente,
+            final String nossoNumero,
             final BoletoStatus status,
             final Instant criadoEm,
-            final Instant atualizadoEm
+            final Instant atualizadoEm,
+            final String url,
+            final String txId,
+            final String emv
     ) {
         this.id = id;
         this.convenio = convenio;
-        this.numeroTituloCliente = numeroTituloCliente;
+        this.nossoNumero = nossoNumero;
         this.status = status;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+        this.url = url;
+        this.txId = txId;
+        this.emv = emv;
     }
 
     public static BoletoJpaEntity from(final Boleto boleto) {
+        final var pix = boleto.getPix();
+        final var url = pix != null ? pix.url() : null;
+        final var txId = pix != null ? pix.txId() : null;
+        final var emv = pix != null ? pix.emv() : null;
         return new BoletoJpaEntity(
                 boleto.getId().getValue(),
                 boleto.getConvenio(),
                 boleto.getNossoNumero(),
                 boleto.getStatus(),
                 boleto.getCriadoEm(),
-                boleto.getAtualizadoEm()
+                boleto.getAtualizadoEm(),
+                url,
+                txId,
+                emv
         );
     }
 
@@ -65,10 +87,13 @@ public class BoletoJpaEntity {
         return Boleto.with(
                 BoletoID.from(getId()),
                 getConvenio(),
-                getNumeroTituloCliente(),
+                getNossoNumero(),
                 getStatus(),
                 getCriadoEm(),
-                getAtualizadoEm()
+                getAtualizadoEm(),
+                getUrl(),
+                getTxId(),
+                getEmv()
         );
     }
 
@@ -88,12 +113,12 @@ public class BoletoJpaEntity {
         this.convenio = convenio;
     }
 
-    public String getNumeroTituloCliente() {
-        return numeroTituloCliente;
+    public String getNossoNumero() {
+        return nossoNumero;
     }
 
-    public void setNumeroTituloCliente(String numeroTituloCliente) {
-        this.numeroTituloCliente = numeroTituloCliente;
+    public void setNossoNumero(String numeroTituloCliente) {
+        this.nossoNumero = numeroTituloCliente;
     }
 
     public BoletoStatus getStatus() {
@@ -118,6 +143,30 @@ public class BoletoJpaEntity {
 
     public void setAtualizadoEm(Instant atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getTxId() {
+        return txId;
+    }
+
+    public void setTxId(String txId) {
+        this.txId = txId;
+    }
+
+    public String getEmv() {
+        return emv;
+    }
+
+    public void setEmv(String emv) {
+        this.emv = emv;
     }
 
     @Override

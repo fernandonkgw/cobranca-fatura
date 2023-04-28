@@ -11,8 +11,10 @@ public record BoletoOutput(
         String nossoNumero,
         BoletoStatus status,
         Instant criadoEm,
-        Instant atualizadoEm
+        Instant atualizadoEm,
+        PixOutput pix
 ) {
+
 
     public static BoletoOutput from(Boleto boleto) {
         return new BoletoOutput(
@@ -21,9 +23,9 @@ public record BoletoOutput(
                 boleto.getNossoNumero(),
                 boleto.getStatus(),
                 boleto.getCriadoEm(),
-                boleto.getAtualizadoEm()
+                boleto.getAtualizadoEm(),
+                PixOutput.from(boleto.getPix())
         );
     }
-
 
 }

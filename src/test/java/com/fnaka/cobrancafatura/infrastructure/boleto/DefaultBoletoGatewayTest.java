@@ -44,7 +44,7 @@ class DefaultBoletoGatewayTest {
 
         Assertions.assertEquals(expectedId.getValue(), persistedBoleto.getId());
         Assertions.assertEquals(expectedConvenio, persistedBoleto.getConvenio());
-        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNossoNumero());
         Assertions.assertEquals(boleto.getStatus(), persistedBoleto.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), persistedBoleto.getCriadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), persistedBoleto.getAtualizadoEm());
@@ -76,7 +76,7 @@ class DefaultBoletoGatewayTest {
 
         Assertions.assertEquals(expectedId.getValue(), persistedBoleto.getId());
         Assertions.assertEquals(expectedConvenio, persistedBoleto.getConvenio());
-        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNumeroTituloCliente());
+        Assertions.assertEquals(expectedNossoNumero, persistedBoleto.getNossoNumero());
         Assertions.assertEquals(boleto.getStatus(), persistedBoleto.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), persistedBoleto.getCriadoEm());
         Assertions.assertEquals(boleto.getAtualizadoEm(), persistedBoleto.getAtualizadoEm());

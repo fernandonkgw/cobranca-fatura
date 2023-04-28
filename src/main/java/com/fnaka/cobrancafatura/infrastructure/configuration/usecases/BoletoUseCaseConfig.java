@@ -6,6 +6,8 @@ import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.ConfirmaRegi
 import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.DefaultConfirmaRegistroPorIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoUseCase;
 import com.fnaka.cobrancafatura.application.boleto.cria.DefaultCriaBoletoUseCase;
+import com.fnaka.cobrancafatura.application.boleto.criapix.CriaPixBoletoUseCase;
+import com.fnaka.cobrancafatura.application.boleto.criapix.DefaultCriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
 import org.springframework.context.annotation.Bean;
@@ -37,5 +39,10 @@ public class BoletoUseCaseConfig {
     @Bean
     public ConfirmaRegistroPorIdUseCase confirmaRegistroPorIdUseCase() {
         return new DefaultConfirmaRegistroPorIdUseCase(boletoGateway, cobrancaGateway);
+    }
+
+    @Bean
+    public CriaPixBoletoUseCase criaPixBoletoUseCase() {
+        return new DefaultCriaPixBoletoUseCase(boletoGateway, cobrancaGateway);
     }
 }

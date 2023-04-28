@@ -26,11 +26,10 @@ public class DefaultCobrancaGateway implements CobrancaGateway {
         } catch (BadRequestException e) {
             return Optional.empty();
         }
-
     }
 
     @Override
     public PixBoleto createPix(Integer convenio, String nossoNumero) {
-        return null;
+        return cobrancaBoletoService.createPix(convenio, nossoNumero);
     }
 }
