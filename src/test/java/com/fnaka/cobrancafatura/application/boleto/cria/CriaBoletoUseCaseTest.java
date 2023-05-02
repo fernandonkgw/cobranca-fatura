@@ -4,6 +4,7 @@ import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +24,8 @@ class CriaBoletoUseCaseTest extends UseCaseTest {
 
     @Mock
     private BoletoGateway boletoGateway;
+    @Mock
+    private EventoBoletoGateway eventoBoletoGateway;
 
     @Override
     protected List<Object> getMocks() {

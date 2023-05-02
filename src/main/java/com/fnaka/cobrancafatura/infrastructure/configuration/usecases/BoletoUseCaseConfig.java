@@ -43,7 +43,7 @@ public class BoletoUseCaseConfig {
 
     @Bean
     public ConfirmaRegistroPorIdUseCase confirmaRegistroPorIdUseCase() {
-        return new DefaultConfirmaRegistroPorIdUseCase(boletoGateway, cobrancaGateway);
+        return new DefaultConfirmaRegistroPorIdUseCase(boletoGateway, cobrancaGateway, eventoBoletoGateway);
     }
 
     @Bean
