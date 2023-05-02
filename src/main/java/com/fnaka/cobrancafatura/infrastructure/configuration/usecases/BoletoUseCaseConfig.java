@@ -19,18 +19,21 @@ public class BoletoUseCaseConfig {
 
     private final BoletoGateway boletoGateway;
     private final CobrancaGateway cobrancaGateway;
+    private final EventoBoletoGateway eventoBoletoGateway;
 
     public BoletoUseCaseConfig(
             BoletoGateway boletoGateway,
-            CobrancaGateway cobrancaGateway
+            CobrancaGateway cobrancaGateway,
+            EventoBoletoGateway eventoBoletoGateway
     ) {
         this.boletoGateway = boletoGateway;
         this.cobrancaGateway = cobrancaGateway;
+        this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
     @Bean
     public CriaBoletoUseCase criaBoletoUseCase() {
-        return new DefaultCriaBoletoUseCase(boletoGateway);
+        return new DefaultCriaBoletoUseCase(boletoGateway, eventoBoletoGateway);
     }
 
     @Bean

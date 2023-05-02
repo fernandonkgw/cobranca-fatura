@@ -7,15 +7,14 @@ import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
 
     private final BoletoGateway boletoGateway;
-//    private final EventoBoletoGateway eventoBoletoGateway;
+    private final EventoBoletoGateway eventoBoletoGateway;
 
     public DefaultCriaBoletoUseCase(
-            BoletoGateway boletoGateway
-//            ,
-//            EventoBoletoGateway eventoBoletoGateway
+            BoletoGateway boletoGateway,
+            EventoBoletoGateway eventoBoletoGateway
     ) {
         this.boletoGateway = boletoGateway;
-//        this.eventoBoletoGateway = eventoBoletoGateway;
+        this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
     @Override
@@ -28,6 +27,7 @@ public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
 
         final var boletoCriado = this.boletoGateway.create(boleto);
         evento.concluido(boletoCriado);
+        this.eventoBoletoGateway.create(evento);
         return CriaBoletoOutput.from(boletoCriado);
     }
 }
