@@ -10,6 +10,7 @@ import com.fnaka.cobrancafatura.application.boleto.criapix.CriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.application.boleto.criapix.DefaultCriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +21,8 @@ public class BoletoUseCaseConfig {
     private final CobrancaGateway cobrancaGateway;
 
     public BoletoUseCaseConfig(
-            BoletoGateway boletoGateway, CobrancaGateway cobrancaGateway
+            BoletoGateway boletoGateway,
+            CobrancaGateway cobrancaGateway
     ) {
         this.boletoGateway = boletoGateway;
         this.cobrancaGateway = cobrancaGateway;

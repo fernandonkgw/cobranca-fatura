@@ -2,13 +2,20 @@ package com.fnaka.cobrancafatura.application.boleto.cria;
 
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 
 public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
 
     private final BoletoGateway boletoGateway;
+//    private final EventoBoletoGateway eventoBoletoGateway;
 
-    public DefaultCriaBoletoUseCase(BoletoGateway boletoGateway) {
+    public DefaultCriaBoletoUseCase(
+            BoletoGateway boletoGateway
+//            ,
+//            EventoBoletoGateway eventoBoletoGateway
+    ) {
         this.boletoGateway = boletoGateway;
+//        this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
     @Override
@@ -17,7 +24,10 @@ public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
         final var nossoNumero = aCommand.nossoNumero();
 
         final var boleto = Boleto.newBoleto(convenio, nossoNumero);
+        final var evento = boleto.newEvento();
 
-        return CriaBoletoOutput.from(this.boletoGateway.create(boleto));
+        final var boletoCriado = this.boletoGateway.create(boleto);
+        evento.concluido(boletoCriado);
+        return CriaBoletoOutput.from(boletoCriado);
     }
 }

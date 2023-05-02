@@ -1,6 +1,7 @@
 package com.fnaka.cobrancafatura.domain.boleto;
 
 import com.fnaka.cobrancafatura.domain.AggregateRoot;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.utils.InstantUtils;
 import com.fnaka.cobrancafatura.domain.validation.ValidationHandler;
 import com.fnaka.cobrancafatura.domain.validation.handler.ThrowsValidationHandler;
@@ -135,4 +136,7 @@ public class Boleto extends AggregateRoot<BoletoID> {
         validate(new ThrowsValidationHandler());
     }
 
+    public EventoBoleto newEvento() {
+        return EventoBoleto.newEvento(this);
+    }
 }

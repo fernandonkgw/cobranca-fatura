@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @IntegrationTest
-class DefaultBoletoGatewayTest {
+class BoletoGatewayIntegrationTest {
 
     @Autowired
     private DefaultBoletoGateway boletoGateway;
