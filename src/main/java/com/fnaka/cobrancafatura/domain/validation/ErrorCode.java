@@ -9,7 +9,9 @@ public enum ErrorCode {
     CFA_005("CFA-005", "'convenio' must be 7 characters"),
     CFA_006("CFA-006", "'boleto' not found"),
     CFA_007("CFA-007", "'status' must be REGISTRADO to generate Pix"),
-    CFA_008("CFA-008", "'nossoNumero' must be 20 characters");
+    CFA_008("CFA-008", "'nossoNumero' must be 20 characters"),
+
+    CFA_009("CFA-009", "Error generating pix");
 
     private final String code;
     private final String message;

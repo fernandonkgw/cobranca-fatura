@@ -139,4 +139,11 @@ public class Boleto extends AggregateRoot<BoletoID> {
     public EventoBoleto newEvento() {
         return EventoBoleto.newEvento(this);
     }
+
+    public Boleto pixNaoCriado() {
+        this.status = BoletoStatus.PIX_CRIADO;
+        this.atualizadoEm = InstantUtils.now();
+//        this.registerEvent(new PixCriadoEvent(this.getId().getValue()));
+        return this;
+    }
 }

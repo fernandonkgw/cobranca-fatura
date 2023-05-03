@@ -30,7 +30,7 @@ public class BoletoRegistradoListener {
         try {
             this.criaPixBoletoUseCase.execute(boletoRegistrado.id());
         } catch (DomainException e) {
-            LOG.warn("Error {} param {}", e.getFirstError().message(), e.getFirstError().getFirstParam());
+            LOG.error("Message {} param {}", e.getFirstError().message(), e.getFirstError().getFirstParam());
         }
     }
 }

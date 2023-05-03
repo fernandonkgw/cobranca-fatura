@@ -43,12 +43,20 @@ public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase {
         final var pixBoletoRequisicao = cobrancaBoletoGateway.createPix(nossoNumero, convenio);
         final var pixBoleto = pixBoletoRequisicao.pixBoleto();
         final var requisicao = pixBoletoRequisicao.requisicao();
-        boleto.criaPix(pixBoleto);
+        if (pixBoleto != null) {
+            boleto.criaPix(pixBoleto);
+        } else {
+            boleto.pixNaoCriado();
+        }
         evento.concluido(boleto, requisicao);
 
-        final var output = CriaPixBoletoOutput.from(boletoGateway.update(boleto).getPix());
+        final var boletoAtualizado = boletoGateway.update(boleto);
         this.eventoBoletoGateway.create(evento);
 
-        return output;
+        if (pixBoleto == null) {
+            throw DomainException.with(Error.with(ErrorCode.CFA_009, anId));
+        }
+
+        return CriaPixBoletoOutput.from(boletoAtualizado.getPix());
     }
 }

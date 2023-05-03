@@ -19,7 +19,6 @@ public class EventoBoletoJpaEntity {
     @Column(name = "boleto_id", nullable = false)
     private String boletoId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BoletoStatus status;
 

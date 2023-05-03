@@ -32,7 +32,6 @@ class OAuthFeignClientIntegrationTest {
 
         final var formData = new HashMap<String, String>();
         formData.put("grant_type", "client_credentials");
-//        formData.put("scope", "cobrancas.boletos-requisicao cobrancas.boletos-info");
 
         // when
         final var actualToken = oAuthFeignClient.token(authorization, formData);

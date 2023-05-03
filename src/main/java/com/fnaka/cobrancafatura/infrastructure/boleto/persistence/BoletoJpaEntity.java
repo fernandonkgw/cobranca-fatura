@@ -21,7 +21,6 @@ public class BoletoJpaEntity {
     @Column(name = "nosso_numero", nullable = false)
     private String nossoNumero;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private BoletoStatus status;
 
