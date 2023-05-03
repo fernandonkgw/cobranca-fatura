@@ -2,6 +2,9 @@ package com.fnaka.cobrancafatura.application.boleto.criapix;
 
 import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.*;
+import com.fnaka.cobrancafatura.domain.dtos.PixBoletoRequisicao;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.Requisicao;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +26,10 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
     @Mock
     private BoletoGateway boletoGateway;
     @Mock
-    private CobrancaGateway cobrancaGateway;
+    private CobrancaBoletoGateway cobrancaBoletoGateway;
+
+    @Mock
+    private EventoBoletoGateway eventoBoletoGateway;
 
     @Test
     void givenAValidCommand_whenCallsCriaPix_shouldReturnPix() {
@@ -37,17 +43,19 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
         boleto.confirmaRegistro();
-        final var pix = new PixBoleto(
+        final var pixBoleto = new PixBoleto(
                 expectedUrl,
                 expectedTxId,
                 expectedEmv
         );
+        final var requisicao = new Requisicao("urlaaa", "convenio", "url:aaaa");
+        final var pixBoletoRequisicao = new PixBoletoRequisicao(pixBoleto, requisicao);
 
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.createPix(expectedConvenio, expectedNossoNumero))
-                .thenReturn(pix);
+        when(cobrancaBoletoGateway.createPix(expectedNossoNumero, expectedConvenio))
+                .thenReturn(pixBoletoRequisicao);
 
         when(boletoGateway.update(any()))
                 .thenAnswer(returnsFirstArg());
@@ -110,6 +118,6 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
 
     @Override
     protected List<Object> getMocks() {
-        return List.of(boletoGateway, cobrancaGateway);
+        return List.of(boletoGateway, cobrancaBoletoGateway);
     }
 }

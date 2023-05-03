@@ -2,7 +2,7 @@ package com.fnaka.cobrancafatura.application.boleto.confirmaregistro;
 
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
-import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
+import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoletoGateway;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
@@ -11,16 +11,16 @@ import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUseCase {
 
     private final BoletoGateway boletoGateway;
-    private final CobrancaGateway cobrancaGateway;
+    private final CobrancaBoletoGateway cobrancaBoletoGateway;
     private final EventoBoletoGateway eventoBoletoGateway;
 
     public DefaultConfirmaRegistroPorIdUseCase(
             BoletoGateway boletoGateway,
-            CobrancaGateway cobrancaGateway,
+            CobrancaBoletoGateway cobrancaBoletoGateway,
             EventoBoletoGateway eventoBoletoGateway
     ) {
         this.boletoGateway = boletoGateway;
-        this.cobrancaGateway = cobrancaGateway;
+        this.cobrancaBoletoGateway = cobrancaBoletoGateway;
         this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
@@ -35,13 +35,17 @@ public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUs
 
         final var evento = boleto.newEvento();
 
-        if (cobrancaGateway.findByConvenioAndNossoNumero(convenio, nossoNumero).isPresent()) {
+        final var cobrancaBoletoRequisicao = cobrancaBoletoGateway.findByNossoNumeroAndConvenio(nossoNumero, convenio);
+        final var cobrancaBoleto = cobrancaBoletoRequisicao.cobrancaBoleto();
+        final var requisicao = cobrancaBoletoRequisicao.requisicao();
+
+        if (cobrancaBoleto != null) {
             boleto.confirmaRegistro();
         } else {
             boleto.registroNaoEncontrado();
         }
 
-        evento.concluido(boleto);
+        evento.concluido(boleto, requisicao);
 
         this.boletoGateway.update(boleto);
         this.eventoBoletoGateway.create(evento);

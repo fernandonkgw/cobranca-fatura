@@ -9,7 +9,7 @@ import com.fnaka.cobrancafatura.application.boleto.cria.DefaultCriaBoletoUseCase
 import com.fnaka.cobrancafatura.application.boleto.criapix.CriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.application.boleto.criapix.DefaultCriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
-import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
+import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoletoGateway;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +18,16 @@ import org.springframework.context.annotation.Configuration;
 public class BoletoUseCaseConfig {
 
     private final BoletoGateway boletoGateway;
-    private final CobrancaGateway cobrancaGateway;
+    private final CobrancaBoletoGateway cobrancaBoletoGateway;
     private final EventoBoletoGateway eventoBoletoGateway;
 
     public BoletoUseCaseConfig(
             BoletoGateway boletoGateway,
-            CobrancaGateway cobrancaGateway,
+            CobrancaBoletoGateway cobrancaBoletoGateway,
             EventoBoletoGateway eventoBoletoGateway
     ) {
         this.boletoGateway = boletoGateway;
-        this.cobrancaGateway = cobrancaGateway;
+        this.cobrancaBoletoGateway = cobrancaBoletoGateway;
         this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
@@ -43,11 +43,11 @@ public class BoletoUseCaseConfig {
 
     @Bean
     public ConfirmaRegistroPorIdUseCase confirmaRegistroPorIdUseCase() {
-        return new DefaultConfirmaRegistroPorIdUseCase(boletoGateway, cobrancaGateway, eventoBoletoGateway);
+        return new DefaultConfirmaRegistroPorIdUseCase(boletoGateway, cobrancaBoletoGateway, eventoBoletoGateway);
     }
 
     @Bean
     public CriaPixBoletoUseCase criaPixBoletoUseCase() {
-        return new DefaultCriaPixBoletoUseCase(boletoGateway, cobrancaGateway);
+        return new DefaultCriaPixBoletoUseCase(boletoGateway, cobrancaBoletoGateway, eventoBoletoGateway);
     }
 }

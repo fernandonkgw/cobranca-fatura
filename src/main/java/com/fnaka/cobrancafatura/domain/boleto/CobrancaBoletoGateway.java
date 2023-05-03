@@ -1,11 +1,11 @@
-package com.fnaka.cobrancafatura.infrastructure.services;
+package com.fnaka.cobrancafatura.domain.boleto;
 
-import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoleto;
-import com.fnaka.cobrancafatura.domain.boleto.PixBoleto;
 import com.fnaka.cobrancafatura.domain.dtos.CobrancaBoletoRequisicao;
 import com.fnaka.cobrancafatura.domain.dtos.PixBoletoRequisicao;
 
-public interface CobrancaBoletoService {
+import java.util.Optional;
+
+public interface CobrancaBoletoGateway {
 
     CobrancaBoletoRequisicao findByNossoNumeroAndConvenio(String nossoNumero, Integer convenio);
 

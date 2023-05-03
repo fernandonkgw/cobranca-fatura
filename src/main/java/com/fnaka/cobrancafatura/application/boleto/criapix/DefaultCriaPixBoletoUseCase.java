@@ -2,21 +2,26 @@ package com.fnaka.cobrancafatura.application.boleto.criapix;
 
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
-import com.fnaka.cobrancafatura.domain.boleto.CobrancaGateway;
+import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 
-public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase{
+public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase {
 
     private final BoletoGateway boletoGateway;
-    private final CobrancaGateway cobrancaGateway;
+    private final CobrancaBoletoGateway cobrancaBoletoGateway;
+    private final EventoBoletoGateway eventoBoletoGateway;
 
     public DefaultCriaPixBoletoUseCase(
-            BoletoGateway boletoGateway, CobrancaGateway cobrancaGateway
+            BoletoGateway boletoGateway,
+            CobrancaBoletoGateway cobrancaBoletoGateway,
+            EventoBoletoGateway eventoBoletoGateway
     ) {
         this.boletoGateway = boletoGateway;
-        this.cobrancaGateway = cobrancaGateway;
+        this.cobrancaBoletoGateway = cobrancaBoletoGateway;
+        this.eventoBoletoGateway = eventoBoletoGateway;
     }
 
     @Override
@@ -33,9 +38,17 @@ public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase{
         final var convenio = boleto.getConvenio();
         final var nossoNumero = boleto.getNossoNumero();
 
-        final var pixBoleto = cobrancaGateway.createPix(convenio, nossoNumero);
-        boleto.criaPix(pixBoleto);
+        final var evento = boleto.newEvento();
 
-        return CriaPixBoletoOutput.from(boletoGateway.update(boleto).getPix());
+        final var pixBoletoRequisicao = cobrancaBoletoGateway.createPix(nossoNumero, convenio);
+        final var pixBoleto = pixBoletoRequisicao.pixBoleto();
+        final var requisicao = pixBoletoRequisicao.requisicao();
+        boleto.criaPix(pixBoleto);
+        evento.concluido(boleto, requisicao);
+
+        final var output = CriaPixBoletoOutput.from(boletoGateway.update(boleto).getPix());
+        this.eventoBoletoGateway.create(evento);
+
+        return output;
     }
 }

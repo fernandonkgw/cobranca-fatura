@@ -2,6 +2,9 @@ package com.fnaka.cobrancafatura.application.boleto.confirmaregistro;
 
 import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.*;
+import com.fnaka.cobrancafatura.domain.dtos.CobrancaBoletoRequisicao;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.Requisicao;
 import com.fnaka.cobrancafatura.domain.events.DomainEventPublisher;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
@@ -26,9 +29,12 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
     @Mock
     private BoletoGateway boletoGateway;
     @Mock
-    private CobrancaGateway cobrancaGateway;
+    private CobrancaBoletoGateway cobrancaBoletoGateway;
     @Mock
     private DomainEventPublisher publisher;
+
+    @Mock
+    private EventoBoletoGateway eventoBoletoGateway;
 
     @Override
     protected List<Object> getMocks() {
@@ -43,7 +49,9 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
 
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
 
-        final var cobranca = new Cobranca("123", 1, 1, 10);
+        final var cobrancaBoleto = new CobrancaBoleto("123", 1, 1, 10);
+        final var requisicao = new Requisicao("http://", null, "abc");
+        final var cobrancaBoletoRequisicao = new CobrancaBoletoRequisicao(cobrancaBoleto, requisicao);
 
         final var expectedId = boleto.getId();
         final var expectedStatus = BoletoStatus.REGISTRADO;
@@ -51,17 +59,17 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.findByConvenioAndNossoNumero(anyInt(), anyString()))
-                .thenReturn(Optional.of(cobranca));
+        when(cobrancaBoletoGateway.findByNossoNumeroAndConvenio(anyString(), anyInt()))
+                .thenReturn(cobrancaBoletoRequisicao);
 
         // when
         useCase.execute(expectedId.getValue());
 
         // then
         verify(boletoGateway).findById(eq(expectedId));
-        verify(cobrancaGateway)
-                .findByConvenioAndNossoNumero(
-                        eq(expectedConvenio), eq(expectedNossoNumero)
+        verify(cobrancaBoletoGateway)
+                .findByNossoNumeroAndConvenio(
+                        eq(expectedNossoNumero), eq(expectedConvenio)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
         verify(boletoGateway).update(captor.capture());
@@ -72,7 +80,6 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedNossoNumero, boletoUpdated.getNossoNumero());
         Assertions.assertEquals(expectedStatus, boletoUpdated.getStatus());
         Assertions.assertEquals(boleto.getCriadoEm(), boletoUpdated.getCriadoEm());
-//        Assertions.assertTrue(boleto.getAtualizadoEm().isBefore(boletoUpdated.getAtualizadoEm()));
     }
 
     @Test
@@ -103,7 +110,9 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         final var expectedNossoNumero = "12345678901234567890";
 
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
-        boleto.publishDomainEvent(publisher);
+
+        final var requisicao = new Requisicao("http://", null, "abc");
+        final var cobrancaBoletoRequisicao = new CobrancaBoletoRequisicao(null, requisicao);
 
         final var expectedId = boleto.getId();
         final var expectedStatus = BoletoStatus.NAO_REGISTRADO;
@@ -111,17 +120,17 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
 
-        when(cobrancaGateway.findByConvenioAndNossoNumero(any(), any()))
-                .thenReturn(Optional.empty());
+        when(cobrancaBoletoGateway.findByNossoNumeroAndConvenio(any(), any()))
+                .thenReturn(cobrancaBoletoRequisicao);
 
         // when
         useCase.execute(expectedId.getValue());
 
         // then
         verify(boletoGateway).findById(eq(expectedId));
-        verify(cobrancaGateway)
-                .findByConvenioAndNossoNumero(
-                        eq(expectedConvenio), eq(expectedNossoNumero)
+        verify(cobrancaBoletoGateway)
+                .findByNossoNumeroAndConvenio(
+                        eq(expectedNossoNumero), eq(expectedConvenio)
                 );
         final var captor = ArgumentCaptor.forClass(Boleto.class);
         verify(boletoGateway).update(captor.capture());

@@ -62,15 +62,19 @@ public class EventoBoletoJpaEntity {
     }
 
     public static EventoBoletoJpaEntity from(final EventoBoleto eventoBoleto) {
+        final var requisicao = eventoBoleto.getRequisicao();
+        final var url = requisicao != null ? requisicao.url() : null;
+        final var request = requisicao != null ? requisicao.payloadRequest() : null;
+        final var response = requisicao != null ? requisicao.payloadResponse() : null;
         return new EventoBoletoJpaEntity(
                 eventoBoleto.getId().getValue(),
                 eventoBoleto.getBoletoId().getValue(),
                 eventoBoleto.getStatus(),
                 eventoBoleto.getCriadoEm(),
                 eventoBoleto.getExecutadoEm(),
-                null,
-                null,
-                null
+                url,
+                request,
+                response
         );
     }
 

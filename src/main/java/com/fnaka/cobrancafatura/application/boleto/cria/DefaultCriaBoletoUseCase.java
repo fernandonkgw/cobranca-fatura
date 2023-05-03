@@ -4,7 +4,7 @@ import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 
-public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase{
+public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase {
 
     private final BoletoGateway boletoGateway;
     private final EventoBoletoGateway eventoBoletoGateway;

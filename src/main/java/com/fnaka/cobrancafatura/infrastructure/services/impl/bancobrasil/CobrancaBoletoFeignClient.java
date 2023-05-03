@@ -1,5 +1,6 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
+import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,11 @@ public interface CobrancaBoletoFeignClient {
             value = "v2/boletos/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    CobrancaResponse detalhaBoleto(
+    Response findByNossoNumeroAndConvenio(
             @RequestHeader("Authorization") String bearerToken,
-            @PathVariable("id") String numeroTituloCliente,
             @RequestParam("gw-dev-app-key") String devAppKey,
-            @RequestParam("numeroConvenio") Integer numeroConvenio
+            @PathVariable("id") String nossoNumero,
+            @RequestParam("numeroConvenio") Integer convenio
     );
 
     @PostMapping(
@@ -27,7 +28,7 @@ public interface CobrancaBoletoFeignClient {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    GeraPixBoletoResponse geraPixBoleto(
+    Response createPixBoleto(
             @RequestHeader("Authorization") String bearerToken,
             @RequestParam("gw-dev-app-key") String devAppKey,
             @PathVariable("id") String nossoNumero,

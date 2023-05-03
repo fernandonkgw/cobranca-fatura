@@ -1,6 +1,6 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
-import com.fnaka.cobrancafatura.domain.boleto.Cobranca;
+import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoleto;
 
 public record CobrancaResponse(
         String codigoLinhaDigitavel,
@@ -9,8 +9,8 @@ public record CobrancaResponse(
         Integer valorPagoSacado
 ) {
 
-    public Cobranca toDomain() {
-        return new Cobranca(
+    public CobrancaBoleto toDomain() {
+        return new CobrancaBoleto(
                 codigoLinhaDigitavel,
                 codigoCanalPagamento,
                 codigoEstadoTituloCobranca,
