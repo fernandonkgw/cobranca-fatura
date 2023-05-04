@@ -29,7 +29,6 @@ public class DefaultEventoBoletoGateway implements EventoBoletoGateway {
     @Override
     public EventoBoleto create(EventoBoleto eventoBoleto) {
 
-
         final var result = this.eventoBoletoRepository.save(EventoBoletoJpaEntity.from(eventoBoleto))
                 .toAggregate();
 

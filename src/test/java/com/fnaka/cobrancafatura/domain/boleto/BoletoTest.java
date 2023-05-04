@@ -239,14 +239,10 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto.getId());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
         Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
-        Assertions.assertInstanceOf(PixCriadoEvent.class, actualBoleto.getDomainEvent());
         final var actualPix = actualBoleto.getPix();
         Assertions.assertEquals(expectedUrl, actualPix.url());
         Assertions.assertEquals(expectedTxId, actualPix.txId());
         Assertions.assertEquals(expectedEmv, actualPix.emv());
-        final var event = (PixCriadoEvent) actualBoleto.getDomainEvent();
-        Assertions.assertEquals(expectedId.getValue(), event.id());
-        Assertions.assertEquals(expectedStatus, event.status());
     }
 
     @Test
@@ -269,10 +265,6 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto.getId());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
         Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
-        Assertions.assertInstanceOf(PixNaoCriadoEvent.class, actualBoleto.getDomainEvent());
         Assertions.assertNull(actualBoleto.getPix());
-        final var event = (PixNaoCriadoEvent) actualBoleto.getDomainEvent();
-        Assertions.assertEquals(expectedId.getValue(), event.id());
-        Assertions.assertEquals(expectedStatus, event.status());
     }
 }

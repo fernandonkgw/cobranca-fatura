@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 
 public class InMemoryWebhookPubService implements WebhookPubService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(InMemoryWebhookPubService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryWebhookPubService.class);
 
     @Override
     public void send(BoletoWebhookEvent webhookEvent) {
-        LOG.info("Webhook event was sent: {}", Json.writeValueAsString(webhookEvent));
+        LOGGER.info("Webhook event was sent: {}", Json.writeValueAsString(webhookEvent));
     }
 }
