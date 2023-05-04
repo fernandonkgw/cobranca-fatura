@@ -34,7 +34,6 @@ class EventoBoletoGatewayIntegrationTest {
         final var expectedBoletoId = boleto.getId();
         final var eventoBoleto = boleto.newEvento();
         final var expectedId = eventoBoleto.getId();
-        eventoBoleto.concluido(boleto);
 
         // when
         final var actualEventoBoleto = eventoBoletoGateway.create(eventoBoleto);

@@ -23,10 +23,9 @@ public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase {
         final var nossoNumero = aCommand.nossoNumero();
 
         final var boleto = Boleto.newBoleto(convenio, nossoNumero);
-        final var evento = boleto.newEvento();
 
         final var boletoCriado = this.boletoGateway.create(boleto);
-        evento.concluido(boletoCriado);
+        final var evento = boleto.newEvento();
         this.eventoBoletoGateway.create(evento);
         return CriaBoletoOutput.from(boletoCriado);
     }

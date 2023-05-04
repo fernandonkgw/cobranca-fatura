@@ -7,7 +7,6 @@ import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import com.fnaka.cobrancafatura.domain.utils.InstantUtils;
 import com.fnaka.cobrancafatura.domain.validation.ValidationHandler;
 
-import java.time.Duration;
 import java.time.Instant;
 
 public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
@@ -35,7 +34,9 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
         final var anId = EventoBoletoID.unique();
         final var boletoId = boleto.getId();
         final var status = boleto.getStatus();
-        return new EventoBoleto(anId, boletoId, status, InstantUtils.now(), null);
+        final var eventoBoleto = new EventoBoleto(anId, boletoId, status, InstantUtils.now(), null);
+        eventoBoleto.registerEvent(boleto.getDomainEvent());
+        return eventoBoleto;
     }
 
     public static EventoBoleto with(
@@ -84,11 +85,6 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
 
     public Requisicao getRequisicao() {
         return requisicao;
-    }
-
-    public EventoBoleto concluido(Boleto boleto) {
-        concluido(boleto, null);
-        return this;
     }
 
     public EventoBoleto concluido(Boleto boleto, Requisicao requisicao) {
