@@ -15,7 +15,6 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
     private final BoletoID boletoId;
     private BoletoStatus status;
     private final Instant criadoEm;
-    private Long executadoEm;
     private Requisicao requisicao;
 
     protected EventoBoleto(
@@ -23,14 +22,12 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
             BoletoID boletoId,
             BoletoStatus status,
             Instant criadoEm,
-            Long executadoEm,
             Requisicao requisicao
     ) {
         super(eventoBoletoID);
         this.boletoId = boletoId;
         this.status = status;
         this.criadoEm = criadoEm;
-        this.executadoEm = executadoEm;
         this.requisicao = requisicao;
     }
 
@@ -38,17 +35,16 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
         final var anId = EventoBoletoID.unique();
         final var boletoId = boleto.getId();
         final var status = boleto.getStatus();
-        return new EventoBoleto(anId, boletoId, status, InstantUtils.now(), null, null);
+        return new EventoBoleto(anId, boletoId, status, InstantUtils.now(), null);
     }
 
     public static EventoBoleto with(
             EventoBoletoID id,
             BoletoID boletoID,
             BoletoStatus status,
-            Instant criadoEm,
-            Long executadoEm
+            Instant criadoEm
     ) {
-        return new EventoBoleto(id, boletoID, status, criadoEm, executadoEm, null);
+        return new EventoBoleto(id, boletoID, status, criadoEm, null);
     }
 
     public static EventoBoleto with(
@@ -62,9 +58,10 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
             String payloalResponse
     ) {
         if (url == null && payloalResponse == null) {
-            return new EventoBoleto(id, boletoID, status, criadoEm, executadoEm, null);
+            return new EventoBoleto(id, boletoID, status, criadoEm, null);
         } else {
-            return new EventoBoleto(id, boletoID, status, criadoEm, executadoEm, new Requisicao(url, payloadRequest, payloalResponse));
+            final var requisicao = new Requisicao(url, payloadRequest, payloalResponse, executadoEm);
+            return new EventoBoleto(id, boletoID, status, criadoEm, requisicao);
         }
     }
 
@@ -85,10 +82,6 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
         return criadoEm;
     }
 
-    public Long getExecutadoEm() {
-        return executadoEm;
-    }
-
     public Requisicao getRequisicao() {
         return requisicao;
     }
@@ -101,8 +94,6 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
     public EventoBoleto concluido(Boleto boleto, Requisicao requisicao) {
         this.status = boleto.getStatus();
         this.registerEvent(boleto.getDomainEvent());
-        final var tempoExecucao = Duration.between(getCriadoEm(), InstantUtils.now()).toMillis();
-        this.executadoEm = tempoExecucao;
         this.requisicao = requisicao;
         return this;
     }

@@ -26,6 +26,8 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto.getCriadoEm());
         Assertions.assertNotNull(actualBoleto.getAtualizadoEm());
         Assertions.assertEquals(actualBoleto.getCriadoEm(), actualBoleto.getAtualizadoEm());
+        Assertions.assertInstanceOf(BoletoCriadoEvent.class, actualBoleto.getDomainEvent());
+        Assertions.assertNull(actualBoleto.getPix());
     }
 
     @Test
@@ -180,7 +182,7 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertNotNull(actualBoleto.getId());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
-        Assertions.assertNotNull(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
         Assertions.assertTrue(actualBoleto.isRegistrado());
         final var event = (BoletoRegistradoEvent) actualBoleto.getDomainEvent();
         Assertions.assertEquals(expectedId.getValue(), event.id());
@@ -206,7 +208,7 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertNotNull(actualBoleto.getId());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
-        Assertions.assertNotNull(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
         Assertions.assertTrue(actualBoleto.isNaoRegistrado());
         final var event = (BoletoNaoRegistradoEvent) actualBoleto.getDomainEvent();
         Assertions.assertEquals(expectedId.getValue(), event.id());
@@ -240,12 +242,40 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto);
         Assertions.assertNotNull(actualBoleto.getId());
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
-        Assertions.assertNotNull(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        Assertions.assertInstanceOf(PixCriadoEvent.class, actualBoleto.getDomainEvent());
         final var actualPix = actualBoleto.getPix();
         Assertions.assertEquals(expectedUrl, actualPix.url());
         Assertions.assertEquals(expectedTxId, actualPix.txId());
         Assertions.assertEquals(expectedEmv, actualPix.emv());
         final var event = (PixCriadoEvent) actualBoleto.getDomainEvent();
+        Assertions.assertEquals(expectedId.getValue(), event.id());
+        Assertions.assertEquals(expectedStatus, event.status());
+    }
+
+    @Test
+    void givenValidParams_whenCallsPixNaoCriado_shouldUpdateStatus() throws InterruptedException {
+        // given
+        final var expectedConvenio = 1234567;
+        final var expectedNossoNumero = "00031285573000000008";
+        final var expectedStatus = BoletoStatus.PIX_NAO_CRIADO;
+
+        final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
+        final var expectedId = boleto.getId();
+        final var beforeUpdate = boleto.getAtualizadoEm();
+        Thread.sleep(100);
+
+        // when
+        final var actualBoleto = boleto.pixNaoCriado();
+
+        // then
+        Assertions.assertNotNull(actualBoleto);
+        Assertions.assertNotNull(actualBoleto.getId());
+        Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
+        Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
+        Assertions.assertInstanceOf(PixNaoCriadoEvent.class, actualBoleto.getDomainEvent());
+        Assertions.assertNull(actualBoleto.getPix());
+        final var event = (PixNaoCriadoEvent) actualBoleto.getDomainEvent();
         Assertions.assertEquals(expectedId.getValue(), event.id());
         Assertions.assertEquals(expectedStatus, event.status());
     }

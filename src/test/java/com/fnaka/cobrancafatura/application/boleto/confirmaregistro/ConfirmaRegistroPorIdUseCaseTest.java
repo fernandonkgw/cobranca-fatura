@@ -50,7 +50,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
 
         final var cobrancaBoleto = new CobrancaBoleto("123", 1, 1, 10);
-        final var requisicao = new Requisicao("http://", null, "abc");
+        final var requisicao = new Requisicao("http://", null, "abc", 100L);
         final var cobrancaBoletoRequisicao = new CobrancaBoletoRequisicao(cobrancaBoleto, requisicao);
 
         final var expectedId = boleto.getId();
@@ -111,7 +111,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
 
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
 
-        final var requisicao = new Requisicao("http://", null, "abc");
+        final var requisicao = new Requisicao("http://", null, "abc", 100L);
         final var cobrancaBoletoRequisicao = new CobrancaBoletoRequisicao(null, requisicao);
 
         final var expectedId = boleto.getId();

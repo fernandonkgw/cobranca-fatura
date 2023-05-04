@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
+// o banco precisa estar up
 @Disabled
 @AmqpTest
 class RabbitEventServiceTest {

@@ -45,14 +45,12 @@ class EventoBoletoGatewayIntegrationTest {
         Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoletoId());
         Assertions.assertEquals(expectedStatus, actualEventoBoleto.getStatus());
         Assertions.assertEquals(eventoBoleto.getCriadoEm(), actualEventoBoleto.getCriadoEm());
-        Assertions.assertEquals(eventoBoleto.getExecutadoEm(), actualEventoBoleto.getExecutadoEm());
 
         final var persistedEvento = eventoBoletoRepository.findById(expectedId.getValue()).get();
         Assertions.assertEquals(expectedId.getValue(), persistedEvento.getId());
         Assertions.assertEquals(expectedBoletoId.getValue(), persistedEvento.getBoletoId());
         Assertions.assertEquals(expectedStatus, persistedEvento.getStatus());
         Assertions.assertEquals(actualEventoBoleto.getCriadoEm(), persistedEvento.getCriadoEm());
-        Assertions.assertEquals(actualEventoBoleto.getExecutadoEm(), persistedEvento.getExecutadoEm());
         Assertions.assertNull(persistedEvento.getUrlRequisicao());
         Assertions.assertNull(persistedEvento.getPayloadRequest());
         Assertions.assertNull(persistedEvento.getPayloadResponse());

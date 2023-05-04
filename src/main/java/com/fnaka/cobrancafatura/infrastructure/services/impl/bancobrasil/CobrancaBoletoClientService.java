@@ -1,15 +1,14 @@
 package com.fnaka.cobrancafatura.infrastructure.services.impl.bancobrasil;
 
-import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoleto;
-import com.fnaka.cobrancafatura.domain.boleto.PixBoleto;
 import com.fnaka.cobrancafatura.domain.dtos.CobrancaBoletoRequisicao;
 import com.fnaka.cobrancafatura.domain.dtos.PixBoletoRequisicao;
 import com.fnaka.cobrancafatura.domain.eventoboleto.Requisicao;
+import com.fnaka.cobrancafatura.domain.utils.InstantUtils;
 import com.fnaka.cobrancafatura.infrastructure.configuration.json.Json;
 import com.fnaka.cobrancafatura.infrastructure.configuration.properties.BancoBrasilCredential;
 import com.fnaka.cobrancafatura.infrastructure.services.CobrancaBoletoService;
+import feign.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -34,85 +33,93 @@ public class CobrancaBoletoClientService implements CobrancaBoletoService {
 
     @Override
     public CobrancaBoletoRequisicao findByNossoNumeroAndConvenio(String nossoNumero, Integer convenio) {
-        final var token = oAuthClientService.generateToken();
-        final var bearerToken = token.getBearerToken();
+        final var bearerToken = getBearerToken();
         final var developerApplicationKey = bancoBrasilCredential.getDeveloperApplicationKey();
+        final var requestedAt = InstantUtils.now();
         final var response = cobrancaBoletoFeignClient.findByNossoNumeroAndConvenio(
                 bearerToken,
                 developerApplicationKey,
                 nossoNumero,
                 convenio
         );
+        final var tempoResponse = InstantUtils.durationUntilNow(requestedAt);
 
-        final var httpStatus = HttpStatus.resolve(response.status());
-        final var request = response.request();
-        final var url = request.url();
-        String requestBody = null;
-        String responseBody = null;
-        CobrancaResponse cobrancaResponse = null;
-        if (request.body() != null) {
-            requestBody = new String(request.body(), StandardCharsets.UTF_8);
-        }
-
-        if (httpStatus.is2xxSuccessful()
-                || httpStatus.is4xxClientError()
-                || httpStatus.is5xxServerError()) {
-            try (InputStream bodyIs = response.body().asInputStream()) {
-
-                responseBody = StreamUtils.copyToString(bodyIs, StandardCharsets.UTF_8);
-                if (httpStatus.is2xxSuccessful()) {
-                    cobrancaResponse = Json.readValue(responseBody, CobrancaResponse.class);
-                }
-
-            } catch (IOException e) {
-                responseBody = "Nao foi possivel converter response body para string. message %s".formatted(e.getMessage());
-            }
-        }
-        final var requisicao = new Requisicao(url, requestBody, responseBody);
+        final var httpStatus = httpStatusFrom(response);
+        final var url = urlFrom(response);
+        final var requestBody = requestBodyFrom(response);
+        final var responseBody = responseBodyFrom(response);
+        final var cobrancaResponse = readValue(httpStatus, responseBody, CobrancaResponse.class);
+        final var requisicao = new Requisicao(url, requestBody, responseBody, tempoResponse);
         final var cobrancaBoleto = cobrancaResponse != null ? cobrancaResponse.toDomain() :null;
-
 
         return new CobrancaBoletoRequisicao(cobrancaBoleto, requisicao);
     }
 
     @Override
     public PixBoletoRequisicao createPix(String nossoNumero, Integer convenio) {
-        final var token = oAuthClientService.generateToken();
-        final var bearerToken = token.getBearerToken();
+        final var bearerToken = getBearerToken();
         final var developerApplicationKey = bancoBrasilCredential.getDeveloperApplicationKey();
+        final var requestedAt = InstantUtils.now();
         final var response = cobrancaBoletoFeignClient.createPixBoleto(
                 bearerToken,
                 developerApplicationKey,
                 nossoNumero,
                 new GeraPixBoletoRequest(convenio)
         );
+        final var tempoResponse = InstantUtils.durationUntilNow(requestedAt);
 
-        final var httpStatus = HttpStatus.resolve(response.status());
+        final var httpStatus = httpStatusFrom(response);
+        final var url = urlFrom(response);
+        final var requestBody = requestBodyFrom(response);
+        final var responseBody = responseBodyFrom(response);
+        final var pixBoletoResponse = readValue(httpStatus, responseBody, GeraPixBoletoResponse.class);
+        final var requisicao = new Requisicao(url, requestBody, responseBody, tempoResponse);
+        final var pixBoleto = pixBoletoResponse != null ? pixBoletoResponse.toDomain() : null;
+
+        return new PixBoletoRequisicao(pixBoleto, requisicao);
+    }
+
+    private String getBearerToken() {
+        final var token = oAuthClientService.generateToken();
+        return token.getBearerToken();
+    }
+
+    private HttpStatus httpStatusFrom(final Response response) {
+        return HttpStatus.resolve(response.status());
+    }
+
+    private String urlFrom(final Response response) {
         final var request = response.request();
-        final var url = request.url();
-        String requestBody = null;
-        String responseBody = null;
-        GeraPixBoletoResponse pixBoletoResponse = null;
-        if (request.body() != null) {
-            requestBody = new String(request.body(), StandardCharsets.UTF_8);
+        return request.url();
+    }
+
+    private String requestBodyFrom(final Response response) {
+        final var requestBody = response.request().body();
+        if (requestBody == null) {
+            return null;
         }
+        return new String(requestBody, StandardCharsets.UTF_8);
+    }
+
+    private String responseBodyFrom(final Response response) {
+        final var httpStatus = httpStatusFrom(response);
+        String responseBody = null;
         if (httpStatus.is2xxSuccessful()
                 || httpStatus.is4xxClientError()
                 || httpStatus.is5xxServerError()) {
             try (InputStream bodyIs = response.body().asInputStream()) {
 
                 responseBody = StreamUtils.copyToString(bodyIs, StandardCharsets.UTF_8);
-                if (httpStatus.is2xxSuccessful()) {
-                    pixBoletoResponse = Json.readValue(responseBody, GeraPixBoletoResponse.class);
-                }
 
             } catch (IOException e) {
                 responseBody = "Nao foi possivel converter response body para string. message %s".formatted(e.getMessage());
             }
         }
-        final var requisicao = new Requisicao(url, requestBody, responseBody);
-        final var pixBoleto = pixBoletoResponse != null ? pixBoletoResponse.toDomain() : null;
+        return responseBody;
+    }
 
-        return new PixBoletoRequisicao(pixBoleto, requisicao);
+    public <T> T readValue(final HttpStatus httpStatus, final String json, final Class<T> clazz) {
+        if (!httpStatus.is2xxSuccessful()) return null;
+        return Json.readValue(json, clazz);
     }
 }

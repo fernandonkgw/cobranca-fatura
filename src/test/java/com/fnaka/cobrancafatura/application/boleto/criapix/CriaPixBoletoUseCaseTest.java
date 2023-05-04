@@ -48,7 +48,7 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
                 expectedTxId,
                 expectedEmv
         );
-        final var requisicao = new Requisicao("urlaaa", "convenio", "url:aaaa");
+        final var requisicao = new Requisicao("urlaaa", "convenio", "url:aaaa", 1000L);
         final var pixBoletoRequisicao = new PixBoletoRequisicao(pixBoleto, requisicao);
 
         when(boletoGateway.findById(any()))

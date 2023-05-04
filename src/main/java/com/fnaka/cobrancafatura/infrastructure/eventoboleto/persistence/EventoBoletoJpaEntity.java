@@ -65,12 +65,13 @@ public class EventoBoletoJpaEntity {
         final var url = requisicao != null ? requisicao.url() : null;
         final var request = requisicao != null ? requisicao.payloadRequest() : null;
         final var response = requisicao != null ? requisicao.payloadResponse() : null;
+        final var tempoResponse = requisicao != null ? requisicao.responseTime() : null;
         return new EventoBoletoJpaEntity(
                 eventoBoleto.getId().getValue(),
                 eventoBoleto.getBoletoId().getValue(),
                 eventoBoleto.getStatus(),
                 eventoBoleto.getCriadoEm(),
-                eventoBoleto.getExecutadoEm(),
+                tempoResponse,
                 url,
                 request,
                 response
@@ -83,7 +84,10 @@ public class EventoBoletoJpaEntity {
                 BoletoID.from(this.boletoId),
                 this.status,
                 this.criadoEm,
-                this.executadoEm
+                this.executadoEm,
+                this.urlRequisicao,
+                this.payloadRequest,
+                this.payloadResponse
         );
     }
 

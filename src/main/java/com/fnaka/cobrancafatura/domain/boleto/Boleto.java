@@ -103,6 +103,13 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return this;
     }
 
+    public Boleto pixNaoCriado() {
+        this.status = BoletoStatus.PIX_NAO_CRIADO;
+        this.atualizadoEm = InstantUtils.now();
+        this.registerEvent(new PixNaoCriadoEvent(this.getId().getValue()));
+        return this;
+    }
+
     @Override
     public void validate(ValidationHandler handler) {
         new BoletoValidator(this, handler).validate();
@@ -140,10 +147,4 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return EventoBoleto.newEvento(this);
     }
 
-    public Boleto pixNaoCriado() {
-        this.status = BoletoStatus.PIX_CRIADO;
-        this.atualizadoEm = InstantUtils.now();
-//        this.registerEvent(new PixCriadoEvent(this.getId().getValue()));
-        return this;
-    }
 }

@@ -26,8 +26,8 @@ public class BoletoCriadoListener {
     @RabbitListener(id = LISTENER_ID, queues = "${amqp.queues.boleto-criado.queue}")
     public void onBoletoCriado(@Payload final String message) {
 
+        LOG.info("boletoCriado {}", message);
         final var boletoCriado = Json.readValue(message, BoletoCriadoEvent.class);
-        LOG.info("boletoCriado {}", Json.writeValueAsString(boletoCriado));
 
         try {
             this.confirmaRegistroPorIdUseCase.execute(boletoCriado.id());

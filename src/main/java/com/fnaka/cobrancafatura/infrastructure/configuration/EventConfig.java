@@ -7,6 +7,7 @@ import com.fnaka.cobrancafatura.infrastructure.services.EventService;
 import com.fnaka.cobrancafatura.infrastructure.services.impl.RabbitEventService;
 import com.fnaka.cobrancafatura.infrastructure.services.local.InMemoryEventService;
 import org.springframework.amqp.rabbit.core.RabbitOperations;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -30,7 +31,6 @@ public class EventConfig {
 
     @Bean
     @BoletoCriadoQueue
-//    @ConditionalOnMissingBean
     @Profile({"local"})
     EventService boletoCriadoEventService(
             @BoletoCriadoQueue QueueProperties props,
@@ -41,7 +41,6 @@ public class EventConfig {
 
     @Bean
     @BoletoRegistradoQueue
-//    @ConditionalOnMissingBean
     @Profile({"local"})
     EventService boletoRegistradoEventService(
             @BoletoRegistradoQueue QueueProperties props,
