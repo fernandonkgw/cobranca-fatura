@@ -1,7 +1,6 @@
 package com.fnaka.cobrancafatura.domain.eventoboleto;
 
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
-import com.fnaka.cobrancafatura.domain.boleto.BoletoCriadoEvent;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,10 +26,5 @@ class EventoBoletoTest {
         Assertions.assertEquals(expectedStatus, actualEventoBoleto.getStatus());
         Assertions.assertNotNull(actualEventoBoleto.getCriadoEm());
         Assertions.assertNull(actualEventoBoleto.getRequisicao());
-        Assertions.assertInstanceOf(BoletoCriadoEvent.class, actualEventoBoleto.getDomainEvent());
-        final var actualBoletoCriadoEvent = (BoletoCriadoEvent) actualEventoBoleto.getDomainEvent();
-        Assertions.assertEquals(expectedBoletoId.getValue(), actualBoletoCriadoEvent.id());
-        Assertions.assertEquals(expectedStatus, actualBoletoCriadoEvent.status());
-        Assertions.assertNotNull(actualBoletoCriadoEvent.occurredOn());
     }
 }

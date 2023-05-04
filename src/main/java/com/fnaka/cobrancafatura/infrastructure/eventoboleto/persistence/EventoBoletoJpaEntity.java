@@ -4,7 +4,10 @@ import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoID;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.Instant;
 import java.util.Objects;

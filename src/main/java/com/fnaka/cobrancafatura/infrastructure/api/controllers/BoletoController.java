@@ -7,10 +7,14 @@ import com.fnaka.cobrancafatura.infrastructure.api.BoletoAPI;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoRequest;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.DetalhaBoletoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BoletoController implements BoletoAPI {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BoletoController.class);
 
     private final CriaBoletoUseCase criaBoletoUseCase;
     private final BuscaBoletoPorIdUseCase buscaBoletoPorIdUseCase;
@@ -30,6 +34,7 @@ public class BoletoController implements BoletoAPI {
         );
 
         final var output = this.criaBoletoUseCase.execute(command);
+        LOGGER.info("Fim da execucao de criacao de boleto");
 
         return CriaBoletoResponse.from(output);
     }

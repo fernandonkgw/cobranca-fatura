@@ -40,7 +40,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
         final var anId = BoletoID.unique();
         final var agora = InstantUtils.now();
         final var result = new Boleto(anId, convenio, nossoNumero, BoletoStatus.CRIADO, agora, agora, null);
-        result.registerEvent(new BoletoCriadoEvent(anId.getValue()));
         return result;
     }
 
@@ -76,7 +75,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
     public Boleto confirmaRegistro() {
         this.status = BoletoStatus.REGISTRADO;
         this.atualizadoEm = InstantUtils.now();
-        this.registerEvent(new BoletoRegistradoEvent(this.getId().getValue()));
         return this;
     }
 

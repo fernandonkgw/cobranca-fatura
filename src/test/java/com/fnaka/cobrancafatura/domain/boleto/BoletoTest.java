@@ -26,7 +26,6 @@ class BoletoTest {
         Assertions.assertNotNull(actualBoleto.getCriadoEm());
         Assertions.assertNotNull(actualBoleto.getAtualizadoEm());
         Assertions.assertEquals(actualBoleto.getCriadoEm(), actualBoleto.getAtualizadoEm());
-        Assertions.assertInstanceOf(BoletoCriadoEvent.class, actualBoleto.getDomainEvent());
         Assertions.assertNull(actualBoleto.getPix());
     }
 
@@ -184,9 +183,6 @@ class BoletoTest {
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
         Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
         Assertions.assertTrue(actualBoleto.isRegistrado());
-        final var event = (BoletoRegistradoEvent) actualBoleto.getDomainEvent();
-        Assertions.assertEquals(expectedId.getValue(), event.id());
-        Assertions.assertEquals(expectedStatus, event.status());
     }
 
     @Test
