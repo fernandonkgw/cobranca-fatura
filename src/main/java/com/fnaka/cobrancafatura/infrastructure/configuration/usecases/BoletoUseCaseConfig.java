@@ -2,6 +2,8 @@ package com.fnaka.cobrancafatura.infrastructure.configuration.usecases;
 
 import com.fnaka.cobrancafatura.application.boleto.busca.BuscaBoletoPorIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.busca.DefaultBuscaBoletoPorIdUseCase;
+import com.fnaka.cobrancafatura.application.boleto.buscapix.BuscaPixPorBoletoIdUseCase;
+import com.fnaka.cobrancafatura.application.boleto.buscapix.DefaultBuscaPixPorBoletoIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.ConfirmaRegistroPorIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.DefaultConfirmaRegistroPorIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoUseCase;
@@ -49,5 +51,10 @@ public class BoletoUseCaseConfig {
     @Bean
     public CriaPixBoletoUseCase criaPixBoletoUseCase() {
         return new DefaultCriaPixBoletoUseCase(boletoGateway, cobrancaBoletoGateway, eventoBoletoGateway);
+    }
+
+    @Bean
+    public BuscaPixPorBoletoIdUseCase buscaPixPorBoletoIdUseCase() {
+        return new DefaultBuscaPixPorBoletoIdUseCase(boletoGateway);
     }
 }

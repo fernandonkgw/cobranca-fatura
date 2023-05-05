@@ -3,6 +3,7 @@ package com.fnaka.cobrancafatura.infrastructure.api;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoRequest;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.CriaBoletoResponse;
 import com.fnaka.cobrancafatura.infrastructure.boleto.models.DetalhaBoletoResponse;
+import com.fnaka.cobrancafatura.infrastructure.boleto.models.DetalhaPixBoletoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -39,4 +40,13 @@ public interface BoletoAPI {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
     })
     DetalhaBoletoResponse detalhaBoleto(@PathVariable(name = "id") String id);
+
+    @GetMapping(value = "{id}/pix")
+    @Operation(summary = "Detalha um Pix do Boleto")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pix do Boleto encontrado"),
+            @ApiResponse(responseCode = "400", description = "Pix nao gerado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+    })
+    DetalhaPixBoletoResponse buscaPixBoleto(@PathVariable(name = "id") String id);
 }
