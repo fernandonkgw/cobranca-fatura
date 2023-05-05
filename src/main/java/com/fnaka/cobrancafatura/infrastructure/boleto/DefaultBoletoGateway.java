@@ -3,10 +3,11 @@ package com.fnaka.cobrancafatura.infrastructure.boleto;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
-import com.fnaka.cobrancafatura.infrastructure.boleto.models.BoletoWebhookEvent;
+import com.fnaka.cobrancafatura.infrastructure.boleto.event.BoletoCriadoEvent;
+import com.fnaka.cobrancafatura.infrastructure.boleto.event.BoletoRegistradoEvent;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
 import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
-import com.fnaka.cobrancafatura.infrastructure.services.WebhookPubService;
+import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +17,22 @@ import java.util.Optional;
 public class DefaultBoletoGateway implements BoletoGateway {
 
     private final BoletoRepository boletoRepository;
-    private final WebhookPubService webhookPubService;
+    private final ApplicationEventMulticaster applicationEventMulticaster;
 
     public DefaultBoletoGateway(
             BoletoRepository boletoRepository,
-            WebhookPubService webhookPubService
+            ApplicationEventMulticaster applicationEventMulticaster
     ) {
         this.boletoRepository = boletoRepository;
-        this.webhookPubService = webhookPubService;
+        this.applicationEventMulticaster = applicationEventMulticaster;
     }
 
     @Override
-    @Transactional
     public Boleto create(Boleto boleto) {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        this.webhookPubService.send(BoletoWebhookEvent.from(boleto));
+        applicationEventMulticaster.multicastEvent(new BoletoCriadoEvent(this, boleto));
 
         return result;
     }
@@ -45,12 +45,13 @@ public class DefaultBoletoGateway implements BoletoGateway {
     }
 
     @Override
-    @Transactional
     public Boleto update(Boleto boleto) {
         final var result = this.boletoRepository.save(BoletoJpaEntity.from(boleto))
                 .toAggregate();
 
-        this.webhookPubService.send(BoletoWebhookEvent.from(boleto));
+        if (boleto.isRegistrado()) {
+            applicationEventMulticaster.multicastEvent(new BoletoRegistradoEvent(this, boleto));
+        }
 
         return result;
     }

@@ -143,4 +143,11 @@ public class Boleto extends AggregateRoot<BoletoID> {
         return EventoBoleto.newEvento(this);
     }
 
+    public boolean isCriado() {
+        return BoletoStatus.CRIADO.equals(getStatus());
+    }
+
+    public boolean isPixCriado() {
+        return BoletoStatus.PIX_CRIADO.equals(getStatus());
+    }
 }

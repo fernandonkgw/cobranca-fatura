@@ -86,7 +86,7 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
     void givenAnInvalidBoletoId_whenCallsConfirmaRegistro_shouldThrowsDomainException() {
         // given
         final var invalidId = BoletoID.from("invalid-id");
-        final var expectedErrorMessage = "'boleto' not found";
+        final var expectedErrorMessage = "'boleto' was not found";
         final var expectedErrorCode = ErrorCode.CFA_006;
 
         when(boletoGateway.findById(any()))

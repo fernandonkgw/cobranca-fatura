@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.eventoboleto.event;
+package com.fnaka.cobrancafatura.infrastructure.boleto.event;
 
 import com.fnaka.cobrancafatura.application.boleto.criapix.CriaPixBoletoUseCase;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class BoletoRegistradoListener {
@@ -22,8 +21,8 @@ public class BoletoRegistradoListener {
 
     @EventListener(BoletoRegistradoEvent.class)
     public void onBoletoRegistrado(BoletoRegistradoEvent event) {
-        final var boletoId = event.getEventoBoleto().getBoletoId().getValue();
-        LOGGER.info(Json.writeValueAsString(event.getEventoBoleto()));
+        final var boletoId = event.getBoleto().getId().getValue();
+        LOGGER.info(Json.writeValueAsString(event.getBoleto()));
         try {
             this.criaPixBoletoUseCase.execute(boletoId);
         } catch (DomainException e) {

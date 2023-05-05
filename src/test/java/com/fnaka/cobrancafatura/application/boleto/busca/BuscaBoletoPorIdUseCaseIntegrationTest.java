@@ -59,7 +59,7 @@ class BuscaBoletoPorIdUseCaseIntegrationTest {
         // given
         final var expectedId = BoletoID.from("invalid");
 
-        final var expectedErrorMessage = "'boleto' not found";
+        final var expectedErrorMessage = "'boleto' was not found";
 
         // when
         final var actualException = Assertions.assertThrows(

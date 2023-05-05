@@ -1,10 +1,7 @@
-package com.fnaka.cobrancafatura.application.boleto.criapix;
+package com.fnaka.cobrancafatura.application.boleto.buscapix;
 
 import com.fnaka.cobrancafatura.UseCaseTest;
 import com.fnaka.cobrancafatura.domain.boleto.*;
-import com.fnaka.cobrancafatura.domain.dtos.PixBoletoRequisicao;
-import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
-import com.fnaka.cobrancafatura.domain.eventoboleto.Requisicao;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -15,50 +12,36 @@ import org.mockito.Mock;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class CriaPixBoletoUseCaseTest extends UseCaseTest {
+class BuscaPixPorBoletoIdUseCaseTest extends UseCaseTest {
 
     @InjectMocks
-    private DefaultCriaPixBoletoUseCase useCase;
+    private DefaultBuscaPixPorBoletoIdUseCase useCase;
+
     @Mock
     private BoletoGateway boletoGateway;
-    @Mock
-    private CobrancaBoletoGateway cobrancaBoletoGateway;
-
-    @Mock
-    private EventoBoletoGateway eventoBoletoGateway;
 
     @Test
-    void givenAValidCommand_whenCallsCriaPix_shouldReturnPix() {
+    void givenABoletoWithStatusPixCriado_whenCallsBuscaPixPorBoletoId_shouldReturnOutput() {
         // given
         final var expectedConvenio = 1234567;
         final var expectedNossoNumero = "12345678901234567890";
-        final var expectedUrl = "qrcodepix-h.bb.com.br/pix/v2/cobv/e09b4025-1598-4688-acb6-0fe20fe61456";
-        final var expectedTxId = "BOLETO31285573000000009DATA27042023";
-        final var expectedEmv = "00020101021226920014br.gov.bcb.pix2570qrcodepix-h.bb.com.br/pix/v2/cobv/e09b4025-1598-4688-acb6-0fe20fe61456520400005303986540512.345802BR5919PADARIA PESSOA ROSA6008BRASILIA62070503***6304A705";
-
+        final var expectedStatus = BoletoStatus.PIX_CRIADO;
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
-        boleto.confirmaRegistro();
-        final var pixBoleto = new PixBoleto(
-                expectedUrl,
-                expectedTxId,
-                expectedEmv
-        );
-        final var requisicao = new Requisicao("urlaaa", "convenio", "url:aaaa", 1000L);
-        final var pixBoletoRequisicao = new PixBoletoRequisicao(pixBoleto, requisicao);
+        final var expectedUrl = "qrcodepix-h.bb.com.br/pix/v2/cobv/299a3f47-7f18-44ec-9711-bfaaa4658da7";
+        final var expectedTxId = "BOLETO31285573200000046DATA04052023";
+        final var expectedEmv = "00020101021226920014br.gov.bcb.pix2570qrcodepix-h.bb.com.br/pix/v2/cobv/299a3f47-7f18-44ec-9711-bfaaa4658da7520400005303986540512.345802BR5919PADARIA PESSOA ROSA6008BRASILIA62070503***6304A171";
+        final var pixBoleto = new PixBoleto(expectedUrl, expectedTxId, expectedEmv);
+        boleto.criaPix(pixBoleto);
+        Assertions.assertEquals(expectedStatus, boleto.getStatus());
 
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
-
-        when(cobrancaBoletoGateway.createPix(expectedNossoNumero, expectedConvenio))
-                .thenReturn(pixBoletoRequisicao);
-
-        when(boletoGateway.update(any()))
-                .thenAnswer(returnsFirstArg());
 
         // when
         final var actualOutput = useCase.execute(expectedId.getValue());
@@ -68,14 +51,16 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
         Assertions.assertEquals(expectedUrl, actualOutput.url());
         Assertions.assertEquals(expectedTxId, actualOutput.txId());
         Assertions.assertEquals(expectedEmv, actualOutput.emv());
+
+        verify(boletoGateway).findById(eq(expectedId));
     }
 
     @Test
-    void givenAnInvalidId_whenCallsCriaPix_shouldThrowsException() {
+    void givenAnInvalidId_whenCallsBuscaPixPorBoletoId_shouldThrowsDomainException() {
         // given
         final var expectedId = BoletoID.from("invalid-id");
-        final var expectedErrorMessage = "'boleto' was not found";
         final var expectedErrorCode = ErrorCode.CFA_006;
+        final var expectedErrorMessage = "'boleto' was not found";
 
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.empty());
@@ -87,20 +72,21 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
 
         // then
         Assertions.assertNotNull(actualException);
-        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
         Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
     }
 
     @Test
-    void givenAnInvalidStatus_whenCallsCriaPix_shouldReturnPix() {
+    void givenAnInvalidStatusCriado_whenCallsBuscaPixPorBoletoId_shouldThrowsDomainException() {
         // given
         final var expectedConvenio = 1234567;
         final var expectedNossoNumero = "12345678901234567890";
-
+        final var expectedStatus = BoletoStatus.CRIADO;
         final var boleto = Boleto.newBoleto(expectedConvenio, expectedNossoNumero);
         final var expectedId = boleto.getId();
-        final var expectedErrorMessage = "'status' must be REGISTRADO to generate Pix";
-        final var expectedErrorCode = ErrorCode.CFA_007;
+        final var expectedErrorCode = ErrorCode.CFA_010;
+        final var expectedErrorMessage = "'status' must be PIX_CRIADO";
+        Assertions.assertEquals(expectedStatus, boleto.getStatus());
 
         when(boletoGateway.findById(any()))
                 .thenReturn(Optional.of(boleto));
@@ -112,12 +98,12 @@ class CriaPixBoletoUseCaseTest extends UseCaseTest {
 
         // then
         Assertions.assertNotNull(actualException);
-        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
         Assertions.assertEquals(expectedErrorCode, actualException.getFirstError().code());
+        Assertions.assertEquals(expectedErrorMessage, actualException.getFirstError().message());
     }
 
     @Override
     protected List<Object> getMocks() {
-        return List.of(boletoGateway, cobrancaBoletoGateway);
+        return List.of(boletoGateway);
     }
 }

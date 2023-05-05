@@ -1,4 +1,4 @@
-package com.fnaka.cobrancafatura.infrastructure.eventoboleto.event;
+package com.fnaka.cobrancafatura.infrastructure.boleto.event;
 
 import com.fnaka.cobrancafatura.application.boleto.confirmaregistro.ConfirmaRegistroPorIdUseCase;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
@@ -21,8 +21,8 @@ public class BoletoCriadoListener {
 
     @EventListener(BoletoCriadoEvent.class)
     public void onBoletoCriado(BoletoCriadoEvent event) {
-        final var boletoId = event.getEventoBoleto().getBoletoId().getValue();
-        LOGGER.info(Json.writeValueAsString(event.getEventoBoleto()));
+        final var boletoId = event.getBoleto().getId().getValue();
+        LOGGER.info(Json.writeValueAsString(event.getBoleto()));
         try {
             this.confirmaRegistroPorIdUseCase.execute(boletoId);
         } catch (DomainException e) {
