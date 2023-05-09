@@ -3,6 +3,7 @@ package com.fnaka.cobrancafatura.infrastructure.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fnaka.cobrancafatura.ControllerTest;
 import com.fnaka.cobrancafatura.application.boleto.busca.DefaultBuscaBoletoPorIdUseCase;
+import com.fnaka.cobrancafatura.application.boleto.buscapix.DefaultBuscaPixPorBoletoIdUseCase;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoCommand;
 import com.fnaka.cobrancafatura.application.boleto.cria.CriaBoletoOutput;
 import com.fnaka.cobrancafatura.application.boleto.cria.DefaultCriaBoletoUseCase;
@@ -40,6 +41,9 @@ public class BoletoAPITest {
 
     @MockBean
     private DefaultBuscaBoletoPorIdUseCase buscaBoletoPorIdUseCase;
+
+    @MockBean
+    private DefaultBuscaPixPorBoletoIdUseCase buscaPixPorBoletoIdUseCase;
 
     @Test
     void givenAValidRequest_whenCallsCriaBoleto_shouldReturnResponseWithId() throws Exception {

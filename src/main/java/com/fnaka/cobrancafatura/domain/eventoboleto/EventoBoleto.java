@@ -31,12 +31,14 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
     }
 
     public static EventoBoleto newEvento(final Boleto boleto) {
+        return newEvento(boleto, null);
+    }
+
+    public static EventoBoleto newEvento(final Boleto boleto, final Requisicao requisicao) {
         final var anId = EventoBoletoID.unique();
         final var boletoId = boleto.getId();
         final var status = boleto.getStatus();
-        final var eventoBoleto = new EventoBoleto(anId, boletoId, status, InstantUtils.now(), null);
-        eventoBoleto.registerEvent(boleto.getDomainEvent());
-        return eventoBoleto;
+        return new EventoBoleto(anId, boletoId, status, InstantUtils.now(), requisicao);
     }
 
     public static EventoBoleto with(
@@ -87,10 +89,4 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
         return requisicao;
     }
 
-    public EventoBoleto concluido(Boleto boleto, Requisicao requisicao) {
-        this.status = boleto.getStatus();
-        this.registerEvent(boleto.getDomainEvent());
-        this.requisicao = requisicao;
-        return this;
-    }
 }

@@ -3,6 +3,7 @@ package com.fnaka.cobrancafatura.application.boleto.criapix;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
@@ -38,8 +39,6 @@ public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase {
         final var convenio = boleto.getConvenio();
         final var nossoNumero = boleto.getNossoNumero();
 
-        final var evento = boleto.newEvento();
-
         final var pixBoletoRequisicao = cobrancaBoletoGateway.createPix(nossoNumero, convenio);
         final var pixBoleto = pixBoletoRequisicao.pixBoleto();
         final var requisicao = pixBoletoRequisicao.requisicao();
@@ -48,9 +47,9 @@ public class DefaultCriaPixBoletoUseCase extends CriaPixBoletoUseCase {
         } else {
             boleto.pixNaoCriado();
         }
-        evento.concluido(boleto, requisicao);
 
         final var boletoAtualizado = boletoGateway.update(boleto);
+        final var evento = EventoBoleto.newEvento(boletoAtualizado, requisicao);
         this.eventoBoletoGateway.create(evento);
 
         if (pixBoleto == null) {

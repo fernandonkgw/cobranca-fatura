@@ -2,6 +2,7 @@ package com.fnaka.cobrancafatura.application.boleto.cria;
 
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 
 public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase {
@@ -25,8 +26,11 @@ public class DefaultCriaBoletoUseCase extends CriaBoletoUseCase {
         final var boleto = Boleto.newBoleto(convenio, nossoNumero);
 
         final var boletoCriado = this.boletoGateway.create(boleto);
-        final var evento = boleto.newEvento();
+
+        final var evento = EventoBoleto.newEvento(boletoCriado);
+
         this.eventoBoletoGateway.create(evento);
+
         return CriaBoletoOutput.from(boletoCriado);
     }
 }

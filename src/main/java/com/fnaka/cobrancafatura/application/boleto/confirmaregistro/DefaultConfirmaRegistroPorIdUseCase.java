@@ -3,6 +3,7 @@ package com.fnaka.cobrancafatura.application.boleto.confirmaregistro;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoGateway;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.CobrancaBoletoGateway;
+import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.Error;
@@ -33,8 +34,6 @@ public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUs
         final var convenio = boleto.getConvenio();
         final var nossoNumero = boleto.getNossoNumero();
 
-        final var evento = boleto.newEvento();
-
         final var cobrancaBoletoRequisicao = cobrancaBoletoGateway.findByNossoNumeroAndConvenio(nossoNumero, convenio);
         final var cobrancaBoleto = cobrancaBoletoRequisicao.cobrancaBoleto();
         final var requisicao = cobrancaBoletoRequisicao.requisicao();
@@ -45,7 +44,7 @@ public class DefaultConfirmaRegistroPorIdUseCase extends ConfirmaRegistroPorIdUs
             boleto.registroNaoEncontrado();
         }
 
-        evento.concluido(boleto, requisicao);
+        final var evento = EventoBoleto.newEvento(boleto, requisicao);
 
         this.boletoGateway.update(boleto);
         this.eventoBoletoGateway.create(evento);
