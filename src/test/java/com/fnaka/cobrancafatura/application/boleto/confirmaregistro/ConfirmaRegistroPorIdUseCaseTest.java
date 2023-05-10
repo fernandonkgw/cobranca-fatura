@@ -5,7 +5,6 @@ import com.fnaka.cobrancafatura.domain.boleto.*;
 import com.fnaka.cobrancafatura.domain.dtos.CobrancaBoletoRequisicao;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoGateway;
 import com.fnaka.cobrancafatura.domain.eventoboleto.Requisicao;
-import com.fnaka.cobrancafatura.domain.events.DomainEventPublisher;
 import com.fnaka.cobrancafatura.domain.exceptions.DomainException;
 import com.fnaka.cobrancafatura.domain.validation.ErrorCode;
 import org.junit.jupiter.api.Assertions;
@@ -30,8 +29,6 @@ class ConfirmaRegistroPorIdUseCaseTest extends UseCaseTest {
     private BoletoGateway boletoGateway;
     @Mock
     private CobrancaBoletoGateway cobrancaBoletoGateway;
-    @Mock
-    private DomainEventPublisher publisher;
 
     @Mock
     private EventoBoletoGateway eventoBoletoGateway;

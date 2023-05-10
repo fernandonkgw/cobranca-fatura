@@ -206,9 +206,6 @@ class BoletoTest {
         Assertions.assertEquals(expectedStatus, actualBoleto.getStatus());
         Assertions.assertTrue(beforeUpdate.isBefore(actualBoleto.getAtualizadoEm()));
         Assertions.assertTrue(actualBoleto.isNaoRegistrado());
-        final var event = (BoletoNaoRegistradoEvent) actualBoleto.getDomainEvent();
-        Assertions.assertEquals(expectedId.getValue(), event.id());
-        Assertions.assertEquals(expectedStatus, event.status());
     }
 
     @Test

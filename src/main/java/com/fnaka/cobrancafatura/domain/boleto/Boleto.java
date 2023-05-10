@@ -85,7 +85,6 @@ public class Boleto extends AggregateRoot<BoletoID> {
     public Boleto registroNaoEncontrado() {
         this.status = BoletoStatus.NAO_REGISTRADO;
         this.atualizadoEm = InstantUtils.now();
-        this.registerEvent(new BoletoNaoRegistradoEvent(this.getId().getValue()));
         return this;
     }
 
