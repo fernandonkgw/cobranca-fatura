@@ -11,20 +11,20 @@ import java.time.Instant;
 
 public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
 
-    private final BoletoID boletoId;
+    private final Boleto boleto;
     private BoletoStatus status;
     private final Instant criadoEm;
     private Requisicao requisicao;
 
     protected EventoBoleto(
             EventoBoletoID eventoBoletoID,
-            BoletoID boletoId,
+            Boleto boleto,
             BoletoStatus status,
             Instant criadoEm,
             Requisicao requisicao
     ) {
         super(eventoBoletoID);
-        this.boletoId = boletoId;
+        this.boleto = boleto;
         this.status = status;
         this.criadoEm = criadoEm;
         this.requisicao = requisicao;
@@ -36,23 +36,22 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
 
     public static EventoBoleto newEvento(final Boleto boleto, final Requisicao requisicao) {
         final var anId = EventoBoletoID.unique();
-        final var boletoId = boleto.getId();
         final var status = boleto.getStatus();
-        return new EventoBoleto(anId, boletoId, status, InstantUtils.now(), requisicao);
+        return new EventoBoleto(anId, boleto, status, InstantUtils.now(), requisicao);
     }
 
     public static EventoBoleto with(
             EventoBoletoID id,
-            BoletoID boletoID,
+            Boleto boleto,
             BoletoStatus status,
             Instant criadoEm
     ) {
-        return new EventoBoleto(id, boletoID, status, criadoEm, null);
+        return new EventoBoleto(id, boleto, status, criadoEm, null);
     }
 
     public static EventoBoleto with(
             EventoBoletoID id,
-            BoletoID boletoID,
+            Boleto boleto,
             BoletoStatus status,
             Instant criadoEm,
             Long executadoEm,
@@ -61,10 +60,10 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
             String payloalResponse
     ) {
         if (url == null && payloalResponse == null) {
-            return new EventoBoleto(id, boletoID, status, criadoEm, null);
+            return new EventoBoleto(id, boleto, status, criadoEm, null);
         } else {
             final var requisicao = new Requisicao(url, payloadRequest, payloalResponse, executadoEm);
-            return new EventoBoleto(id, boletoID, status, criadoEm, requisicao);
+            return new EventoBoleto(id, boleto, status, criadoEm, requisicao);
         }
     }
 
@@ -73,8 +72,8 @@ public class EventoBoleto extends AggregateRoot<EventoBoletoID> {
 
     }
 
-    public BoletoID getBoletoId() {
-        return boletoId;
+    public Boleto getBoleto() {
+        return boleto;
     }
 
     public BoletoStatus getStatus() {

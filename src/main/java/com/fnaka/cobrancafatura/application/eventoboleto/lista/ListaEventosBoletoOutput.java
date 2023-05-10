@@ -18,7 +18,7 @@ public record ListaEventosBoletoOutput(
 
         return new ListaEventosBoletoOutput(
                 eventoBoleto.getId().getValue(),
-                eventoBoleto.getBoletoId().getValue(),
+                eventoBoleto.getBoleto().getId().getValue(),
                 eventoBoleto.getStatus(),
                 eventoBoleto.getCriadoEm(),
                 ListaRequisicaoEventoBoletoOutput.from(eventoBoleto.getRequisicao())

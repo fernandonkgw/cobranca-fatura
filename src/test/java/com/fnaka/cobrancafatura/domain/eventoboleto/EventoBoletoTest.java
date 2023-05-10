@@ -22,7 +22,7 @@ class EventoBoletoTest {
         // then
         Assertions.assertNotNull(actualEventoBoleto);
         Assertions.assertNotNull(actualEventoBoleto.getId());
-        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoletoId());
+        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoleto().getId());
         Assertions.assertEquals(expectedStatus, actualEventoBoleto.getStatus());
         Assertions.assertNotNull(actualEventoBoleto.getCriadoEm());
         Assertions.assertNull(actualEventoBoleto.getRequisicao());
@@ -53,7 +53,7 @@ class EventoBoletoTest {
         // then
         Assertions.assertNotNull(actualEventoBoleto);
         Assertions.assertNotNull(actualEventoBoleto.getId());
-        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoletoId());
+        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoleto().getId());
         Assertions.assertEquals(expectedStatus, actualEventoBoleto.getStatus());
         final var actualRequisicao = actualEventoBoleto.getRequisicao();
         Assertions.assertEquals(expectedUrl, actualRequisicao.url());

@@ -1,13 +1,10 @@
 package com.fnaka.cobrancafatura.infrastructure.eventoboleto.persistence;
 
-import com.fnaka.cobrancafatura.domain.boleto.BoletoID;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoleto;
 import com.fnaka.cobrancafatura.domain.eventoboleto.EventoBoletoID;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -18,9 +15,6 @@ public class EventoBoletoJpaEntity {
 
     @Id
     private String id;
-
-    @Column(name = "boleto_id", nullable = false)
-    private String boletoId;
 
     @Column(name = "status", nullable = false)
     private BoletoStatus status;
@@ -40,12 +34,16 @@ public class EventoBoletoJpaEntity {
     @Column(name = "payload_response")
     private String payloadResponse;
 
+    @ManyToOne
+    @JoinColumn(name = "boleto_id")
+    private BoletoJpaEntity boleto;
+
     public EventoBoletoJpaEntity() {
     }
 
     private EventoBoletoJpaEntity(
             String id,
-            String boletoId,
+            BoletoJpaEntity boleto,
             BoletoStatus status,
             Instant criadoEm,
             Long executadoEm,
@@ -54,7 +52,7 @@ public class EventoBoletoJpaEntity {
             String payloadResponse
     ) {
         this.id = id;
-        this.boletoId = boletoId;
+        this.boleto = boleto;
         this.status = status;
         this.criadoEm = criadoEm;
         this.executadoEm = executadoEm;
@@ -71,7 +69,7 @@ public class EventoBoletoJpaEntity {
         final var tempoResponse = requisicao != null ? requisicao.responseTime() : null;
         return new EventoBoletoJpaEntity(
                 eventoBoleto.getId().getValue(),
-                eventoBoleto.getBoletoId().getValue(),
+                BoletoJpaEntity.from(eventoBoleto.getBoleto()),
                 eventoBoleto.getStatus(),
                 eventoBoleto.getCriadoEm(),
                 tempoResponse,
@@ -84,7 +82,7 @@ public class EventoBoletoJpaEntity {
     public EventoBoleto toAggregate() {
         return EventoBoleto.with(
                 EventoBoletoID.from(this.id),
-                BoletoID.from(this.boletoId),
+                this.boleto.toAggregate(),
                 this.status,
                 this.criadoEm,
                 this.executadoEm,
@@ -100,14 +98,6 @@ public class EventoBoletoJpaEntity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getBoletoId() {
-        return boletoId;
-    }
-
-    public void setBoletoId(String boletoId) {
-        this.boletoId = boletoId;
     }
 
     public BoletoStatus getStatus() {
@@ -156,6 +146,14 @@ public class EventoBoletoJpaEntity {
 
     public void setPayloadResponse(String payloadResponse) {
         this.payloadResponse = payloadResponse;
+    }
+
+    public BoletoJpaEntity getBoleto() {
+        return boleto;
+    }
+
+    public void setBoleto(BoletoJpaEntity boleto) {
+        this.boleto = boleto;
     }
 
     @Override

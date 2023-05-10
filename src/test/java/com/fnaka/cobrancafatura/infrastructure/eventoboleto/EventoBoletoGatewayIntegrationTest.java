@@ -3,6 +3,8 @@ package com.fnaka.cobrancafatura.infrastructure.eventoboleto;
 import com.fnaka.cobrancafatura.IntegrationTest;
 import com.fnaka.cobrancafatura.domain.boleto.Boleto;
 import com.fnaka.cobrancafatura.domain.boleto.BoletoStatus;
+import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoJpaEntity;
+import com.fnaka.cobrancafatura.infrastructure.boleto.persistence.BoletoRepository;
 import com.fnaka.cobrancafatura.infrastructure.eventoboleto.persistence.EventoBoletoRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,9 @@ class EventoBoletoGatewayIntegrationTest {
 
     @Autowired
     private EventoBoletoRepository eventoBoletoRepository;
+
+    @Autowired
+    private BoletoRepository boletoRepository;
 
     @Test
     void testDependencies() {
@@ -35,19 +40,21 @@ class EventoBoletoGatewayIntegrationTest {
         final var eventoBoleto = boleto.newEvento();
         final var expectedId = eventoBoleto.getId();
 
+        boletoRepository.saveAndFlush(BoletoJpaEntity.from(boleto));
+
         // when
         final var actualEventoBoleto = eventoBoletoGateway.create(eventoBoleto);
 
         // then
         Assertions.assertNotNull(actualEventoBoleto);
         Assertions.assertEquals(expectedId, actualEventoBoleto.getId());
-        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoletoId());
+        Assertions.assertEquals(expectedBoletoId, actualEventoBoleto.getBoleto().getId());
         Assertions.assertEquals(expectedStatus, actualEventoBoleto.getStatus());
         Assertions.assertEquals(eventoBoleto.getCriadoEm(), actualEventoBoleto.getCriadoEm());
 
         final var persistedEvento = eventoBoletoRepository.findById(expectedId.getValue()).get();
         Assertions.assertEquals(expectedId.getValue(), persistedEvento.getId());
-        Assertions.assertEquals(expectedBoletoId.getValue(), persistedEvento.getBoletoId());
+        Assertions.assertEquals(expectedBoletoId.getValue(), persistedEvento.getBoleto().getId());
         Assertions.assertEquals(expectedStatus, persistedEvento.getStatus());
         Assertions.assertEquals(actualEventoBoleto.getCriadoEm(), persistedEvento.getCriadoEm());
         Assertions.assertNull(persistedEvento.getUrlRequisicao());
